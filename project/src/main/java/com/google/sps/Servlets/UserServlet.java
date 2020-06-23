@@ -32,6 +32,6 @@ public class UserServlet extends HttpServlet {
     } else {
       request.getSession(false).invalidate();
     }
-    response.sendRedirect("login.jsp");
+    response.sendRedirect("/#-MAYYw2CqGI_NOJIi4su");
   }
 }

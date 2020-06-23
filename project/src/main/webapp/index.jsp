@@ -109,6 +109,8 @@
       <% User user = null;
         if (session.getAttribute("userID") != null) {
             user = Database.getUserByID((long) session.getAttribute("userID")); 
+        } else {
+          response.sendRedirect("login.jsp");  
         } %>
         <%= user.getNickname() %>
     </div>

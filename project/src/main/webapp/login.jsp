@@ -5,6 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Log In Test</title>
+     <link rel="stylesheet" href="main.css" />
     <% User user = null;
     if (session.getAttribute("userID") != null) {
         user = Database.getUserByID((long) session.getAttribute("userID")); 
