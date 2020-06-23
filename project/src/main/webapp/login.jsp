@@ -8,6 +8,10 @@
    
 <body onload="load()">
   <p id="log"></p> 
+  
+  <% if (session.getAttribute("userID") != null) { %>
+  <p> <%= session.getAttribute("userID") %> </p>
+  <% } %>
 
   <script>
     function load() {

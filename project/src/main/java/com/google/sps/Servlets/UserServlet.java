@@ -7,30 +7,27 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import com.google.gson.*;
-import java.io.PrintWriter;
 
-@WebServlet("/Auth")
-public class AuthServlet extends HttpServlet {
+@WebServlet("/User")
+public class UserServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
-      String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/User"; //change to UserServlet
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-      
-      out.println("<a href=" + logoutUrl + ">Log Out</a>");
-    } else {
-      String urlToRedirectToAfterUserLogsIn = "/User"; //change to UserServlet
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+      HttpSession session = request.getSession(true);
 
-      out.println("<a href=" + loginUrl + ">Log In</a>");
+      String userEmail = userService.getCurrentUser().getEmail();
+      User user = Database.getUserByEmail(userEmail);
+      session.setAttribute("userID", user.getUserID());
+      
+    } else {
+      request.getSession(false).invalidate();
     }
+    response.sendRedirect("login.jsp");
   }
 }
