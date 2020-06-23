@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="com.google.sps.models.*" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -35,7 +37,6 @@
       .header {
         height: 45px;
         background: white;
-        color: white;
         border: 1px solid grey
       }
 
@@ -104,7 +105,13 @@
   </head>
 
   <body onload="init()">
-    <div class="header"></div>
+    <div class="header">
+      <% User user = null;
+        if (session.getAttribute("userID") != null) {
+            user = Database.getUserByID((long) session.getAttribute("userID")); 
+        } %>
+        <%= user.getNickname() %>
+    </div>
     <div class="operations">
       Language: 
       <select onchange="changeLanguage()" id="selectLang">
