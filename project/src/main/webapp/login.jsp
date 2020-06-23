@@ -1,13 +1,22 @@
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="com.google.sps.models.*" %>
 <!DOCTYPE html>
 <html>
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <title>Log In Test</title>
+   <% User user = null;
+   if (session.getAttribute("userID") != null) {
+      user = Database.getUserByID((long) session.getAttribute("userID")); 
+   } %>
 </head>
    
 <body onload="load()">
   <p id="log"></p> 
+  
+  <% if (session.getAttribute("userID") != null) { %>
+  <p> <%= session.getAttribute("userID") %>, <%= user.getNickname() %> </p>
+  <% } %>
 
   <script>
     function load() {
