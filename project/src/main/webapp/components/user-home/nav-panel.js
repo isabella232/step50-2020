@@ -10,7 +10,7 @@ export class NavPanel extends LitElement {
 
   constructor() {
     super();
-    this.languages = ["Python", "Javacript"]
+    this.languages = ['Python', 'Javacript']
   }
 
   // Remove shadow DOM so styles are inherited

@@ -10,14 +10,8 @@ export class DocsComponent extends LitElement {
   constructor() {
     super();
     this.documents = [
-      {
-        "title": "A doc",
-        "timestamp": "June 16, 5:28PM"
-      },
-      {
-        "title": "Another doc",
-        "timestamp": "June 15, 1:30PM"
-      }
+      {'title': 'A doc', 'timestamp': 'June 16, 5:28PM'},
+      {'title': 'Another doc', 'timestamp': 'June 15, 1:30PM'}
     ]
   }
 
@@ -31,13 +25,14 @@ export class DocsComponent extends LitElement {
       <div>
           <div class="title">My Code Docs</div>
           <ul class="docs-list">
-            ${this.documents.map((doc) =>
-              html`
+            ${
+        this.documents.map(
+            (doc) => html`
                 <li class="docs-list-element">
-                  ${doc.title} <div class="revision-text">Latest Revision: ${doc.timestamp}</div>
+                  ${doc.title} <div class="revision-text">Latest Revision: ${
+                doc.timestamp}</div>
                 </li>
-              `
-            )}
+              `)}
           <ul>
       </div>
     `;
