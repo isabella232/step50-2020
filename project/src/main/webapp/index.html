@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
     <link rel="stylesheet" href="https://firepad.io/releases/v1.5.9/firepad.css" />
     <link rel="stylesheet" href="https://codemirror.net/theme/ayu-dark.css" />
+    <link rel="stylesheet" href="https://codemirror.net/theme/neo.css" />
+    <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css" />
     <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
@@ -45,7 +47,33 @@
           border: 1px solid grey;
       }
 
-      select {
+      selectTheme {
+        -webkit-writing-mode: horizontal-tb !important;
+        text-rendering: auto;
+        color: -internal-light-dark-color(black, white);
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-transform: none;
+        text-indent: 0px;
+        text-shadow: none;
+        display: inline-block;
+        text-align: start;
+        -webkit-appearance: menulist;
+        box-sizing: border-box;
+        align-items: center;
+        white-space: pre;
+        -webkit-rtl-ordering: logical;
+        background-color: -internal-light-dark-color(white, black);
+        cursor: default;
+        margin: 0em;
+        font: 400 13.3333px Arial;
+        border-radius: 0px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgb(169, 169, 169);
+        border-image: initial;
+      }
+      selectLang {
         -webkit-writing-mode: horizontal-tb !important;
         text-rendering: auto;
         color: -internal-light-dark-color(black, white);
@@ -78,14 +106,28 @@
   <body onload="init()">
     <div class="header"></div>
     <div class="operations">
+      Language: 
+      <select onchange="changeLanguage()" id="selectLang">
+        <option selected>python</option>
+        <option>javascript</option>
+      </select>
       Theme: 
-      <select id="select">
-        <option selected>ayu-dark</option>
+      <select onchange="changeTheme()" id="selectTheme">
+        <option selected>neo</option>
+        <option>ayu-dark</option>
+        <option>monokai</option>
       </select>
     </div>
     <div id="firepad-container"></div>
 
     <script>
+        //// Create CodeMirror (with line numbers and the JavaScript mode).
+        var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+            lineNumbers: true,
+            mode: 'python',
+            theme: 'neo'
+        });
+
         function init() {
         //// Initialize Firebase.
         //// TODO: replace with your Firebase project configuration.
@@ -99,15 +141,20 @@
         //// Get Firebase Database reference.
         var firepadRef = getExampleRef();
 
-        //// Create CodeMirror (with line numbers and the JavaScript mode).
-        var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-            lineNumbers: true,
-            mode: 'python',
-            theme: 'ayu-dark'
-        });
-
         //// Create Firepad.
         var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
+        }
+
+        function changeTheme() {
+            var input = document.getElementById("selectTheme");
+            var theme = input.options[input.selectedIndex].textContent;
+            codeMirror.setOption("theme", theme);
+        }
+
+        function changeLanguage() {
+            var input = document.getElementById("selectLang");
+            var lang = input.options[input.selectedIndex].textContent;
+            codeMirror.setOption("mode", lang);
         }
 
         // Helper to get hash from end of URL or generate a random one.
