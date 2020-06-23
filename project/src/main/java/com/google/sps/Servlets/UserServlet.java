@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import com.google.gson.*;
+import com.google.sps.models.User;
+import com.google.sps.models.Database;
 
 @WebServlet("/User")
 public class UserServlet extends HttpServlet {
@@ -22,7 +24,9 @@ public class UserServlet extends HttpServlet {
       HttpSession session = request.getSession(true);
 
       String userEmail = userService.getCurrentUser().getEmail();
-      User user = Database.getUserByEmail(userEmail);
+      String nickname = userService.getCurrentUser().getNickname();
+
+      User user = Database.logInUser(userEmail, nickname);
       session.setAttribute("userID", user.getUserID());
       
     } else {

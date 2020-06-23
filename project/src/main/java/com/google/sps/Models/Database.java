@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps.servlets;
+package com.google.sps.models;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -41,26 +41,34 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public class Database {
-
-  private static DatastoreService getDatastore() {
-    return DatastoreServiceFactory.getDatastoreService();
-  }
-
   // public static List<int> getUserDocumentIDs(int id) {
   //   getDatabase();
   //   //return list of document ids
   // }
 
-  private static User createUser(String email) {
-    Entity userEntity = new Entity("User");
-    ArrayList<String> documents = new ArrayList<String>();
+  public static User logInUser(String email, String nickname) {
+    Query query = new Query("User").addFilter("email", Query.FilterOperator.EQUAL, email);
+    Entity userEntity = getDatastore().prepare(query).asSingleEntity();
 
-    userEntity.setProperty("email", email);
-    userEntity.setProperty("documents", documents);
-    getDatastore().put(userEntity);
+    if(userEntity != null) {
+      return new User(email, nickname, userEntity.getKey().getId());
+    } else {
+      return createUser(email, nickname);
+    }
+  }
+
+  public static User getUserByID(String email) {
+    Query query = new Query("User").addFilter("email", Query.FilterOperator.EQUAL, email);
+    Entity userEntity = getDatastore().prepare(query).asSingleEntity();
+
+    String nickname = (String) userEntity.getProperty("nickname");
     long userID = userEntity.getKey().getId();
 
-    return new User(email, userID);
+    if(userEntity == null) {
+      return null;
+    }
+
+    return new User(email, nickname, userID);
   }
 
   public static User getUserByID(long userID) {
@@ -68,18 +76,29 @@ public class Database {
     Entity userEntity = getDatastore().prepare(query).asSingleEntity();
 
     String email = (String) userEntity.getProperty("email");
+    String nickname = (String) userEntity.getProperty("nickname");
 
-    return new User(email, userID);
+    if(userEntity == null) {
+      return null;
+    }
+
+    return new User(email, nickname, userID);
   }
 
-  public static User getUserByEmail(String email) {
-    Query query = new Query("User").addFilter("email", Query.FilterOperator.EQUAL, email);
-    Entity userEntity = getDatastore().prepare(query).asSingleEntity();
+  private static DatastoreService getDatastore() {
+    return DatastoreServiceFactory.getDatastoreService();
+  }
 
-    if(userEntity != null) {
-      return new User(email, userEntity.getKey().getId());
-    } else {
-      return createUser(email);
-    }
+  private static User createUser(String email, String nickname) {
+    Entity userEntity = new Entity("User");
+    ArrayList<String> documents = new ArrayList<String>();
+
+    userEntity.setProperty("email", email);
+    userEntity.setProperty("nickname", nickname);
+    userEntity.setProperty("documents", documents);
+    getDatastore().put(userEntity);
+    long userID = userEntity.getKey().getId();
+
+    return new User(email, nickname, userID);
   }
 }
