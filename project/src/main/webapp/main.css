@@ -26,8 +26,11 @@ body {
 .nav-panel {
   padding: 150px 50px 150px 50px;
   border-right: 2px solid #e5e5e5; }
-  .nav-panel .new-doc-group .item {
-    margin-bottom: 15px; }
+  .nav-panel .new-doc-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 128px; }
   .nav-panel .nav-btn-group {
     margin-top: 100px; }
 
@@ -73,7 +76,7 @@ body {
     background-color: #f7f7f7; }
 
 .dropdown-border, .dropdown-borderless {
-  font-weight: weight-normal; }
+  font-weight: 400; }
 
 .dropdown-borderless {
   border: none; }

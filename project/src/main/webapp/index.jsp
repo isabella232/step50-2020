@@ -37,15 +37,15 @@
       .header {
         height: 45px;
         background: white;
-        border: 1px solid grey
+        border: 1px solid grey;
       }
 
       /* the toolbar with operations */
       .operations {
-          height: 19px;
-          padding: 5px;
-          background: white;
-          border: 1px solid grey;
+        height: 19px;
+        padding: 5px;
+        background: white;
+        border: 1px solid grey;
       }
 
       selectTheme {
@@ -100,7 +100,6 @@
         border-color: rgb(169, 169, 169);
         border-image: initial;
       }
-
     </style>
   </head>
 
@@ -115,12 +114,12 @@
         <%= user.getNickname() %>
     </div>
     <div class="operations">
-      Language: 
+      Language:
       <select onchange="changeLanguage()" id="selectLang">
         <option selected>python</option>
         <option>javascript</option>
       </select>
-      Theme: 
+      Theme:
       <select onchange="changeTheme()" id="selectTheme">
         <option selected>neo</option>
         <option>ayu-dark</option>
@@ -130,57 +129,57 @@
     <div id="firepad-container"></div>
 
     <script>
-        //// Create CodeMirror (with line numbers and the JavaScript mode).
-        var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-            lineNumbers: true,
-            mode: 'python',
-            theme: 'neo'
-        });
+      //// Create CodeMirror (with line numbers and the JavaScript mode).
+      var codeMirror = CodeMirror(document.getElementById("firepad-container"), {
+        lineNumbers: true,
+        mode: "python",
+        theme: "neo",
+      })
 
-        function init() {
+      function init() {
         //// Initialize Firebase.
         //// TODO: replace with your Firebase project configuration.
         var config = {
-            apiKey: '<API_KEY>',
-            authDomain: "firepad-tests.firebaseapp.com",
-            databaseURL: "https://firepad-tests.firebaseio.com"
-        };
-        firebase.initializeApp(config);
+          apiKey: "<API_KEY>",
+          authDomain: "firepad-tests.firebaseapp.com",
+          databaseURL: "https://firepad-tests.firebaseio.com",
+        }
+        firebase.initializeApp(config)
 
         //// Get Firebase Database reference.
-        var firepadRef = getExampleRef();
+        var firepadRef = getExampleRef()
 
         //// Create Firepad.
-        var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
-        }
+        var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror)
+      }
 
-        function changeTheme() {
-            var input = document.getElementById("selectTheme");
-            var theme = input.options[input.selectedIndex].textContent;
-            codeMirror.setOption("theme", theme);
-        }
+      function changeTheme() {
+        var input = document.getElementById("selectTheme")
+        var theme = input.options[input.selectedIndex].textContent
+        codeMirror.setOption("theme", theme)
+      }
 
-        function changeLanguage() {
-            var input = document.getElementById("selectLang");
-            var lang = input.options[input.selectedIndex].textContent;
-            codeMirror.setOption("mode", lang);
-        }
+      function changeLanguage() {
+        var input = document.getElementById("selectLang")
+        var lang = input.options[input.selectedIndex].textContent
+        codeMirror.setOption("mode", lang)
+      }
 
-        // Helper to get hash from end of URL or generate a random one.
-        function getExampleRef() {
-        var ref = firebase.database().ref();
-        var hash = window.location.hash.replace(/#/g, '');
+      // Helper to get hash from end of URL or generate a random one.
+      function getExampleRef() {
+        var ref = firebase.database().ref()
+        var hash = window.location.hash.replace(/#/g, "")
         if (hash) {
-            ref = ref.child(hash);
+          ref = ref.child(hash)
         } else {
-            ref = ref.push(); // generate unique location.
-            window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+          ref = ref.push() // generate unique location.
+          window.location = window.location + "#" + ref.key // add it as a hash to the URL.
         }
-        if (typeof console !== 'undefined') {
-            console.log('Firebase data: ', ref.toString());
+        if (typeof console !== "undefined") {
+          console.log("Firebase data: ", ref.toString())
         }
-        return ref;
-        }
+        return ref
+      }
     </script>
   </body>
 </html>
