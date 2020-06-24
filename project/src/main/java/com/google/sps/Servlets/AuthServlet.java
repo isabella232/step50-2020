@@ -21,12 +21,12 @@ public class AuthServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/User"; // change to UserServlet
+      String urlToRedirectToAfterUserLogsOut = "/User";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
       out.println(
           "<a href=" + logoutUrl + "><button class=\"primary-blue-btn\">Log Out</button></a>");
     } else {
-      String urlToRedirectToAfterUserLogsIn = "/User"; // change to UserServlet
+      String urlToRedirectToAfterUserLogsIn = "/User";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
       out.println(
