@@ -140,11 +140,11 @@
         //// Initialize Firebase.
         //// TODO: replace with your Firebase project configuration.
         var config = {
-          apiKey: "<API_KEY>",
-          authDomain: "firepad-tests.firebaseapp.com",
-          databaseURL: "https://firepad-tests.firebaseio.com",
-        }
-        firebase.initializeApp(config)
+            apiKey: 'AIzaSyDUYns7b2bTK3Go4dvT0slDcUchEtYlSWc',
+            authDomain: "step-collaborative-code-editor.firebaseapp.com",
+            databaseURL: "https://step-collaborative-code-editor.firebaseio.com"
+        };
+        firebase.initializeApp(config);
 
         //// Get Firebase Database reference.
         var firepadRef = getExampleRef()
