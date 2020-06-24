@@ -5,7 +5,7 @@ import {html, LitElement} from 'https://unpkg.com/@polymer/lit-element/lit-eleme
  * id - id of the div containing the dropdown
  * label - initial label at the top of the dropdown
  * changeLabel - whether to change the top label based on selection
- * styling - optional css classes for the dropdown */
+ * styling - css classes to apply to all elements in the dropdown */
 export class DropdownElement extends LitElement {
   static get properties() {
     return {
@@ -58,15 +58,12 @@ export class DropdownElement extends LitElement {
             </span>
           </button>
         </div>
-        <div class="${
-                              'dropdown-menu ' +
-        this.styling}" id="dropdown-menu" role="menu">
+        <div class="${'dropdown-menu ' + this.styling}" id="dropdown-menu" role="menu">
           <div class="dropdown-content">
-            ${
-        this.options.map(
-            (option) => html`<a href="#" @click=${
-                () => this.toggleSelectedItem(
-                    option)} class="dropdown-item"> ${option} </a>`)}
+            ${this.options.map((option) => 
+              html`
+                <a href="#" @click=${() => this.toggleSelectedItem(option)} class="dropdown-item"> ${option} </a>
+              `)}
           </div>
         </div>
       </div>

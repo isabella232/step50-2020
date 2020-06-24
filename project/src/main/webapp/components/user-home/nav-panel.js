@@ -21,22 +21,20 @@ export class NavPanel extends LitElement {
   render() {
     return html`   
       <div>
-          <div class="new-doc-group">
-            <input class="white-input full-width item" placeholder="Write a document title..." />
-            <div class="full-width">
-              <dropdown-element 
-                .options="${this.languages}" 
-                id="languages"
-                label="Languages"
-                styling="full-width">
-              </dropdown-element>
-            </div>
-            <button class="primary-blue-btn full-width item"> + New doc</button>
-          </div>
-          <div class="nav-btn-group">
-            <button class="text-btn full-width"> My code docs </button>
-            <button class="text-btn full-width"> Shared with me </button>
-          </div>
+        <div class="new-doc-group">
+          <input class="white-input full-width" placeholder="Write a document title..." />
+          <dropdown-element 
+            .options="${this.languages}" 
+            id="languages"
+            label="Languages"
+            styling="full-width">
+          </dropdown-element>
+          <button class="primary-blue-btn full-width"> + New doc</button>
+        </div>
+        <div class="nav-btn-group">
+          <button class="text-btn full-width"> My code docs </button>
+          <button class="text-btn full-width"> Shared with me </button>
+        </div>
       </div>
     `;
   }
