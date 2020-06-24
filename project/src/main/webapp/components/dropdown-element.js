@@ -58,11 +58,16 @@ export class DropdownElement extends LitElement {
             </span>
           </button>
         </div>
-        <div class="${'dropdown-menu ' + this.styling}" id="dropdown-menu" role="menu">
+        <div class="${
+                              'dropdown-menu ' +
+        this.styling}" id="dropdown-menu" role="menu">
           <div class="dropdown-content">
-            ${this.options.map((option) => 
-              html`
-                <a href="#" @click=${() => this.toggleSelectedItem(option)} class="dropdown-item"> ${option} </a>
+            ${
+        this.options.map(
+            (option) => html`
+                <a href="#" @click=${
+                () => this.toggleSelectedItem(
+                    option)} class="dropdown-item"> ${option} </a>
               `)}
           </div>
         </div>
