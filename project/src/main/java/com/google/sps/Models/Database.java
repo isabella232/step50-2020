@@ -104,12 +104,30 @@ public class Database {
 
   private static Document createDocument(String name, String language, String hash, long userID) {
       Entity docEntity = new Entity("Document");
+      ArrayList<long> userIDs = new ArrayList<long>();
       
       docEntity.setProperty("name", name);
       docEntity.setProperty("language", language);
       docEntity.setProperty("hash", hash);
-      getDatastore().put(userEntity);
+      userIDs.add(userID);
+      docEntity.setProperty("userIDs", userIDs);
+      getDatastore().put(docEntity);
 
-      return new Document(name, language, hash, Arr)
+      return new Document(name, language, hash, userIDs);
+  }
+
+  public static Document getDocumentByHash(String hash) {
+    Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
+    Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+
+    String name = (String) docEntity.getProperty("name");
+    String language = (String) docEntity.getProperty("language");
+    ArrayList<long> userIDs = docEntity.getProperty("userIDs");
+
+    if(docEntity == null) {
+      return null;
+    }
+
+    return new Document(name, language, hash, userIDs);
   }
 }
