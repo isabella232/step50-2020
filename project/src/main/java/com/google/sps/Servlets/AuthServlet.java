@@ -2,18 +2,17 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.*;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import com.google.gson.*;
-import java.io.PrintWriter;
 
 @WebServlet("/Auth")
 public class AuthServlet extends HttpServlet {
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
@@ -22,15 +21,16 @@ public class AuthServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
       String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/User"; //change to UserServlet
+      String urlToRedirectToAfterUserLogsOut = "/User";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-      
-      out.println("<a href=" + logoutUrl + ">Log Out</a>");
+      out.println(
+          "<a href=" + logoutUrl + "><button class=\"primary-blue-btn\">Log Out</button></a>");
     } else {
-      String urlToRedirectToAfterUserLogsIn = "/User"; //change to UserServlet
+      String urlToRedirectToAfterUserLogsIn = "/User";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      out.println("<a href=" + loginUrl + ">Log In</a>");
+      out.println(
+          "<a href=" + loginUrl + "><button class=\"primary-blue-btn\">Log In</button></a>");
     }
   }
 }
