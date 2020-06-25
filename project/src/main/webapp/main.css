@@ -53,12 +53,28 @@ body {
   height: 100%; }
 
 #center-container {
-  height: 10vh;
-  width: 20vh;
+  height: 15vh;
+  width: 40vw;
   background-color: #f7f7f7;
-  padding-top: 3vh; }
+  padding-top: 2vh; }
+  #center-container button {
+    height: 40px !important; }
+  #center-container #demo-button {
+    margin-right: 10px;
+    padding-left: 15px;
+    padding-right: 15px; }
 
-.primary-blue-btn, #center-container button {
+#title {
+  font-size: 32px;
+  font-weight: bold; }
+
+#description {
+  font-style: italic; }
+
+#signin-buttons {
+  margin-top: 10px; }
+
+.primary-blue-btn, #center-container #demo-button {
   border: none;
   border-radius: 4px;
   background-color: #3574e0;
@@ -67,7 +83,7 @@ body {
   font-weight: 500;
   height: 32px; }
 
-.white-btn, .dropdown-border, .dropdown-borderless {
+.white-btn, #center-container button, .dropdown-border, .dropdown-borderless {
   border: 1px #cecece solid;
   border-radius: 4px;
   background-color: white;
