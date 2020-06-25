@@ -57,7 +57,7 @@ public class Database {
     }
   }
 
-  public static User getUserByID(String email) {
+  public static User getUserByEmail(String email) {
     Query query = new Query("User").addFilter("email", Query.FilterOperator.EQUAL, email);
     Entity userEntity = getDatastore().prepare(query).asSingleEntity();
 
@@ -100,5 +100,16 @@ public class Database {
     long userID = userEntity.getKey().getId();
 
     return new User(email, nickname, userID);
+  }
+
+  private static Document createDocument(String name, String language, String hash, long userID) {
+      Entity docEntity = new Entity("Document");
+      
+      docEntity.setProperty("name", name);
+      docEntity.setProperty("language", language);
+      docEntity.setProperty("hash", hash);
+      getDatastore().put(userEntity);
+
+      return new Document(name, language, hash, Arr)
   }
 }
