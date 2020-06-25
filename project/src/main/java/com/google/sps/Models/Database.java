@@ -104,7 +104,7 @@ public class Database {
 
   private static Document createDocument(String name, String language, String hash, long userID) {
       Entity docEntity = new Entity("Document");
-      ArrayList<long> userIDs = new ArrayList<long>();
+      ArrayList<Long> userIDs = new ArrayList<Long>();
       
       docEntity.setProperty("name", name);
       docEntity.setProperty("language", language);
@@ -122,7 +122,7 @@ public class Database {
 
     String name = (String) docEntity.getProperty("name");
     String language = (String) docEntity.getProperty("language");
-    ArrayList<long> userIDs = docEntity.getProperty("userIDs");
+    ArrayList<Long> userIDs = (ArrayList)docEntity.getProperty("userIDs");
 
     if(docEntity == null) {
       return null;
@@ -131,11 +131,11 @@ public class Database {
     return new Document(name, language, hash, userIDs);
   }
 
-  public static ArrayList<long> getDocumentUsers(String hash) {
+  public static ArrayList<Long> getDocumentUsers(String hash) {
     Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = getDatastore().prepare(query).asSingleEntity();
 
-    ArrayList<long> userIDs = docEntity.getProperty("userIDs");
+    ArrayList<Long> userIDs = (ArrayList)docEntity.getProperty("userIDs");
 
     if(docEntity == null) {
       return null;

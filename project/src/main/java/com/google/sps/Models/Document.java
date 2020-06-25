@@ -19,16 +19,16 @@ import java.util.ArrayList;
 
 public class Document{
   String language, name, hash;
-  ArrayList<long> userIDs;
+  ArrayList<Long> userIDs = new ArrayList<Long>();
   
-  Document(String name, String language, String hash, ArrayList<long> userIDs) {
+  Document(String name, String language, String hash, ArrayList<Long> userIDs) {
     this.name = name;
     this.language = language;
     this.hash = hash;
     this.userIDs = userIDs;
   }
 
-  public ArrayList<long> getUserIDs() {
+  public ArrayList<Long> getUserIDs() {
     return userIDs;
   }
 
