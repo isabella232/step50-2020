@@ -130,4 +130,17 @@ public class Database {
 
     return new Document(name, language, hash, userIDs);
   }
+
+  public static ArrayList<long> getDocumentUsers(String hash) {
+    Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
+    Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+
+    ArrayList<long> userIDs = docEntity.getProperty("userIDs");
+
+    if(docEntity == null) {
+      return null;
+    }
+
+    return userIDs;
+  } 
 }
