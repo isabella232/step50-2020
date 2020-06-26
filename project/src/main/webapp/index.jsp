@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://codemirror.net/theme/ayu-dark.css" />
     <link rel="stylesheet" href="https://codemirror.net/theme/neo.css" />
     <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
@@ -107,11 +108,11 @@
     <div class="header">
       <% User user = null;
         if (session.getAttribute("userID") != null) {
-            user = Database.getUserByID((long) session.getAttribute("userID")); 
-        } else {
-          response.sendRedirect("login.jsp");  
+            user = Database.getUserByID((long) session.getAttribute("userID")); %>
+            <%= user.getNickname() %>
+        <% } else {
+          response.sendRedirect("/login.jsp");  
         } %>
-        <%= user.getNickname() %>
     </div>
     <div class="operations">
       Language:
