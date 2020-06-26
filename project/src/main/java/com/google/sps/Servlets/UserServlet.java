@@ -27,15 +27,11 @@ public class UserServlet extends HttpServlet {
       User user = Database.logInUser(userEmail, nickname);
       session.setAttribute("userID", user.getUserID());
 
+      String hash = "MAYYw2CqGI_NOJIi4su";
+      response.sendRedirect("/Document?documentHash=" + hash);
+
     } else {
       request.getSession(false).invalidate();
-    }
-
-    String hash = "MAYYw2CqGI_NOJIi4su";
-    request.setAttribute("documentHash", hash);
-    try {
-      request.getRequestDispatcher("/document.jsp#-" + hash).forward(request, response);
-    } catch (Exception e) {
       response.sendRedirect("/");
     }
   }
