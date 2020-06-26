@@ -107,11 +107,13 @@
   <body onload="init(); getHash()">
     <div class="header">
       <% User user = null;
+         Document document = null;
         if (session.getAttribute("userID") != null) {
-            user = Database.getUserByID((long) session.getAttribute("userID")); %>
-            <%= user.getNickname() +","+ request.getRequestURL().toString(); %>
+            user = Database.getUserByID((long) session.getAttribute("userID"));
+            document = Database.getDocumentByHash((String)request.getAttribute("documentHash")); %>
+            <%= document.getName(); %>
         <% } else {
-          response.sendRedirect("/login.jsp");  
+          response.sendRedirect("/");  
         } %>
 
         

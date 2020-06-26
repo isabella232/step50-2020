@@ -30,6 +30,13 @@ public class UserServlet extends HttpServlet {
     } else {
       request.getSession(false).invalidate();
     }
-    response.sendRedirect("/document.jsp#-MAYYw2CqGI_NOJIi4su");
+
+    String hash = "MAYYw2CqGI_NOJIi4su";
+    request.setAttribute("documentHash", hash);
+    try {
+      request.getRequestDispatcher("/document.jsp#-" + hash).forward(request, response);
+    } catch (Exception e) {
+      response.sendRedirect("/");
+    }
   }
 }
