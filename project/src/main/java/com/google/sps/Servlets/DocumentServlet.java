@@ -20,8 +20,7 @@ public class DocumentServlet extends HttpServlet {
     try {
       request.getRequestDispatcher("/document.jsp#-" + hash).forward(request, response);
     } catch (Exception e) {
-      System.out.println(e.toString());
-      response.sendRedirect("/XD");
+      response.sendRedirect("/");
     }
   }
 }
