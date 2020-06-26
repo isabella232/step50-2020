@@ -30,4 +30,8 @@ public class User{
   public ArrayList<String> getDocs() {
       return docHashes;
   }
+
+  public void setDocs(ArrayList<String> newHashes) {
+      docHashes = newHashes;
+  }
 }
