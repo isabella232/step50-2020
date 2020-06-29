@@ -30,12 +30,9 @@
       </div>
     </div>
 
-    <button onclick="loadDocument()">load doc</button>
-
     <script>
       function loadDocument() {
-        window.location.href = "/Document?documentHash=" + "-MB0xUcxPev2hwovq_fn";
-        //xhttp.open("GET", "/Document?documentHash=" + "-MB0xUcxPev2hwovq_fn"/* documentHash */, true);
+        window.location.href = "/Document?documentHash=" /* documentHash */;
       }
     </script>
   </body>
