@@ -11,6 +11,13 @@
     <script type="module" src="./components/user-home/nav-panel.js"></script>
     <script type="module" src="./components/user-home/docs-component.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+    
+    <% User user = null;
+        if (session.getAttribute("userID") != null) {
+            user = Database.getUserByID((long) session.getAttribute("userID"));
+        } else {
+          response.sendRedirect("/");  
+        } %>
   </head>
 
   <body>
