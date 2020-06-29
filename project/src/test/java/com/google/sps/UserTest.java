@@ -31,38 +31,15 @@ public final class UserTest {
     User user = new User("tinodore@google.com", "Tino", 100000L, docs);
 
     String email = user.getEmail();
-
     Assert.assertEquals("tinodore@google.com", email);
-  }
-
-  @Test
-  public void testName() {
-    ArrayList<String> docs = new ArrayList<String>();
-    User user = new User("tinodore@google.com", "Tino", 100000L, docs);
 
     String name = user.getNickname();
-
     Assert.assertEquals("Tino", name);
-  }
-
-  @Test
-  public void testUserID() {
-    ArrayList<String> docs = new ArrayList<String>();
-    User user = new User("tinodore@google.com", "Tino", 100000L, docs);
 
     long ID = user.getUserID();
-
     Assert.assertEquals(100000L, ID);
-  }
-
-  @Test
-  public void testDocs() {
-    // Testing empty doc array
-    ArrayList<String> docs = new ArrayList<String>();
-    User user = new User("tinodore@google.com", "Tino", 100000L, docs);
 
     ArrayList<String> userDocs = user.getDocs();
-
     Assert.assertEquals(docs, userDocs);
 
     // Testing with a populated array
@@ -70,7 +47,6 @@ public final class UserTest {
     User user2 = new User("tinodore@google.com", "Tino", 100000L, docs2);
 
     ArrayList<String> userDocs2 = user.getDocs();
-
     Assert.assertEquals(docs2, userDocs2);
   }
 } 

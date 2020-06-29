@@ -25,42 +25,20 @@ import java.util.ArrayList;
 @RunWith(JUnit4.class)
 public final class DocumentTest {
   @Test
-  public void testName() {
+  public void testGetters() {
     ArrayList<Long> userIDs = new ArrayList<Long>();
     Document doc = new Document("new_doc", "python", "x6723hbS", userIDs);
 
     String name = doc.getName();
-
     Assert.assertEquals("new_doc", name);
-  }
-
-  @Test
-  public void testLang() {
-    ArrayList<Long> userIDs = new ArrayList<Long>();
-    Document doc = new Document("new_doc", "python", "x6723hbS", userIDs);
 
     String lang = doc.getLanguage();
-
     Assert.assertEquals("python", lang);
-  }
-
-  @Test
-  public void testHash() {
-    ArrayList<Long> userIDs = new ArrayList<Long>();
-    Document doc = new Document("new_doc", "python", "x6723hbS", userIDs);
 
     String hash = doc.getHash();
-
     Assert.assertEquals("x6723hbS", hash);
-  }
-
-  @Test
-  public void testUsers() {
-    ArrayList<Long> userIDs = new ArrayList<Long>();
-    Document doc = new Document("new_doc", "python", "x6723hbS", userIDs);
 
     ArrayList<Long> testUsers = doc.getUserIDs();
-
     Assert.assertEquals(userIDs, testUsers);
 
     ArrayList<Long> userIDs2 = new ArrayList<Long>();
@@ -68,7 +46,6 @@ public final class DocumentTest {
     Document doc2 = new Document("new_doc", "python", "x6723hbS", userIDs2);
 
     ArrayList<Long> testUsers2 = doc2.getUserIDs();
-
     Assert.assertEquals(userIDs2, testUsers2);
   }
 }
