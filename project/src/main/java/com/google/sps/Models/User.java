@@ -7,10 +7,13 @@ public class User {
   String email, nickname;
   long userID;
 
-  User(String email, String nickname, long userID) {
+  ArrayList<String> docHashes = new ArrayList<String>();
+  
+  User(String email, String nickname, long userID, ArrayList<String> docHashes) {
     this.email = email;
     this.nickname = nickname;
     this.userID = userID;
+    this.docHashes = docHashes;
   }
 
   public long getUserID() {
@@ -23,5 +26,13 @@ public class User {
 
   public String getEmail() {
     return email;
+  }
+
+  public ArrayList<String> getDocs() {
+      return docHashes;
+  }
+
+  public void setDocs(ArrayList<String> newHashes) {
+      docHashes = newHashes;
   }
 }
