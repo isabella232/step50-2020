@@ -10,17 +10,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+
 
 @WebServlet("/Document")
 public class DocumentServlet extends HttpServlet {
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     String hash = request.getParameter("documentHash");
     request.setAttribute("documentHash", hash);
-    try {
-      request.getRequestDispatcher("/document.jsp#-" + hash).forward(request, response);
-    } catch (Exception e) {
-      response.sendRedirect("/");
-    }
+
+    request.getRequestDispatcher("/document.jsp#-" + hash).forward(request, response);
   }
 }
