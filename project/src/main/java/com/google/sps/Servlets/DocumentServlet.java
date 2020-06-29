@@ -21,6 +21,6 @@ public class DocumentServlet extends HttpServlet {
     String hash = request.getParameter("documentHash");
     request.setAttribute("documentHash", hash);
 
-    request.getRequestDispatcher("/document.jsp#-" + hash).forward(request, response);
+    request.getRequestDispatcher("/document.jsp#" + hash).forward(request, response);
   }
 }

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="main.css" />
     <script type="module" src="./components/user-home/nav-panel.js"></script>
     <script type="module" src="./components/user-home/docs-component.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
   </head>
 
   <body>
@@ -21,5 +22,14 @@
         <docs-component></docs-component>
       </div>
     </div>
+
+    <button onclick="loadDocument()">load doc</button>
+
+    <script>
+      function loadDocument() {
+        window.location.href = "/Document?documentHash=" + "-MB0xUcxPev2hwovq_fn";
+        //xhttp.open("GET", "/Document?documentHash=" + "-MB0xUcxPev2hwovq_fn"/* documentHash */, true);
+      }
+    </script>
   </body>
 </html>
