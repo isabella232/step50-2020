@@ -204,6 +204,8 @@ public class Database {
     return true;
   }
 
+  //Takes a Document hash and a userID
+  //Adds the userID to the Document's list of users
   public static void addUserForDocument(String hash, long userID) {
     Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = getDatastore().prepare(query).asSingleEntity();
