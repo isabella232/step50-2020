@@ -183,4 +183,34 @@ public class Database {
 
     return docs;
   }
+
+  //Takes in a Document hash and a User email
+  //Adds the userID to the Document's list of Users
+  //Adds the Document's hash to the User's list of Documents
+  //Returns true if successful, false if the user doesn't exist
+  public static boolean shareDocument(String hash, String email) {
+    Query query = new Query("User").addFilter("email", Query.FilterOperator.EQUAL, email);
+    Entity userEntity = getDatastore().prepare(query).asSingleEntity();
+
+    if(userEntity == null) {
+      return false;
+    }
+
+    long userID = userEntity.getKey().getId();
+ 
+    addDocumentForUser(hash, userID);
+    addUserForDocument(hash, userID);
+
+    return true;
+  }
+
+  public static void addUserForDocument(String hash, long userID) {
+    Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
+    Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+    ArrayList<Long> userIDs = getDocumentUsers(hash);
+
+    userIDs.add(userID);
+    docEntity.setProperty("userIDs", userIDs);
+    getDatastore().put(docEntity);
+  }
 }
