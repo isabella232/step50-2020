@@ -172,7 +172,7 @@
       // Helper to get hash from end of URL or generate a random one.
       function getExampleRef() {
         var ref = firebase.database().ref()
-        var hash = window.location.hash.replace(/#/g, "")
+        var hash = "<%= (String)request.getAttribute("documentHash") %>"
         if (hash) {
           ref = ref.child(hash)
         } else {
