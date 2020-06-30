@@ -27,10 +27,6 @@
         </div> 
       </div>
     </div>
-    
-    <% if (session.getAttribute("userID") != null) { %>
-    <p> <%= session.getAttribute("userID") %>, <%= user.getNickname() %> </p>
-    <% } %>
 
     <script>
       function load() {
