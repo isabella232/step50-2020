@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="main.css" />
+    <script type="module" src="./components/toolbar-component.js"></script>
     <script src="script.js"></script>
     <style>
       html {
@@ -119,17 +121,7 @@
         
     </div>
     <div class="operations">
-      Language:
-      <select onchange="changeLanguage()" id="selectLang">
-        <option selected>python</option>
-        <option>javascript</option>
-      </select>
-      Theme:
-      <select onchange="changeTheme()" id="selectTheme">
-        <option selected>neo</option>
-        <option>ayu-dark</option>
-        <option>monokai</option>
-      </select>
+      <toolbar-component></toolbar-component>
     </div>
     <div id="firepad-container"></div>
 
