@@ -116,7 +116,13 @@
           response.sendRedirect("/");  
         } %>
 
-        
+      <form id="share-form" onsubmit="return share()">
+        <label for="email">Share with email:</label>
+        <input type="email" id="email" name="email"> 
+        <input type="submit">
+        <p style="color: red" id="share-response"></p>
+      </form>
+
     </div>
     <div class="operations">
       Language:
@@ -188,6 +194,18 @@
       //Get hash of current document
       function getHash() {
         return window.location.hash.substr(2);
+      }
+
+      //Shares document with email from share-form
+      function share() {
+        var formData = new FormData(document.getElementById("share-form"));
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/Share", true);
+        xhttp.onreadystatechange = function() {
+          document.getElementById("share-response").innerHTML = this.responseText;
+        }
+        xhttp.send(formData);
+        return false;
       }
     </script>
   </body>
