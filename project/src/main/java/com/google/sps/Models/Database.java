@@ -183,6 +183,10 @@ public class Database {
     }
 
     long userID = userEntity.getKey().getId();
+    
+    if(getUsersDocumentsHashes(userID).contains(hash)) {
+      return true;
+    }
 
     addDocumentForUser(hash, userID);
     addUserForDocument(hash, userID);
