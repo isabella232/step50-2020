@@ -200,6 +200,7 @@ public class Database {
     userIDs.add(userID);
     docEntity.setProperty("userIDs", userIDs);
     getDatastore().put(docEntity);
+  }
     
   // Datastore does not support empty collections (it will be stored as null)
   // https://cloud.google.com/appengine/docs/standard/java/datastore/entities#Using_an_empty_list
