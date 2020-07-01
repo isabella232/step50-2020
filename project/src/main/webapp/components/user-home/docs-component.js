@@ -4,12 +4,16 @@ export class DocsComponent extends LitElement {
   static get properties() {
     return {
       documents: {type: Object},
+      nickname: {type: String},
+      email: {type: String},
     };
   }
 
   constructor() {
     super();
     this.documents = [];
+    this.nickname = '';
+    this.email = '';
   }
 
   // Remove shadow DOM so styles are inherited
@@ -18,26 +22,47 @@ export class DocsComponent extends LitElement {
   }
 
   getServletData() {
-    fetch('/UserHome').then((response) => response.json()).then((documentList)
-    => { this.documents = documentList;
+    fetch('/UserHome').then((response) => response.json()).then((documentsData) => { 
+      this.documents = JSON.parse(documentsData.documents);
+      this.nickname = documentsData.nickname;
+      this.email = documentsData.email;
     });
+  }
+
+  loadDocument(hash) {
+    window.location.href = "/Document?documentHash=" + hash;
   }
 
   render() {
     return html`        
       <div>
+        <div class="user-info">
+          <b>${this.nickname}</b>
+          <br>
+          ${this.email}
+        </div>
+        <div class="docs-component">
           <div class="title">My Code Docs</div>
           <ul class="docs-list">
-            ${
-        this.documents.map(
-            (doc) => html`
-                <li class="docs-list-element">
-                  ${doc.name} <div class="revision-text">Latest Revision: ${
-                doc.language}</div>
+            ${this.documents.map((doc) => html`
+                <li>
+                  <div>
+                    <a @click=${() => this.loadDocument(doc.hash)}>
+                      ${doc.name}
+                    </a>
+                    <span class="tag tag-bordered">
+                      ${doc.language}
+                    </span>
+                  </div>
+                  <div class="shared-with-text">
+                    <b> Shared with </b> 
+                    ${doc.userIDs.toString()}
+                  </div>
                 </li>
             `)}
           <ul>
           ${this.getServletData()}
+        </div>
       </div>
     `;
   }
