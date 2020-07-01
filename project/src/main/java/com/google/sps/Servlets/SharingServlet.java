@@ -8,8 +8,8 @@ import com.google.sps.models.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +26,7 @@ public class SharingServlet extends HttpServlet {
 
     System.out.println(email + hash);
 
-    if(Database.shareDocument(hash, email)) {
+    if (Database.shareDocument(hash, email)) {
       out.println("Document shared with " + email);
     } else {
       out.println("user specified does not exist");
