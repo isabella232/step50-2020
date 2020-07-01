@@ -120,6 +120,7 @@
         <label for="email">Share with email:</label>
         <input type="email" id="email" name="email"> 
         <input type="submit">
+        <input type="hidden" id="documentHash" name="documentHash" value="<%= (String)request.getAttribute("documentHash") %>">
         <p style="color: red" id="share-response"></p>
       </form>
 
