@@ -40,68 +40,21 @@
       .header {
         height: 45px;
         background: white;
-        border: 1px solid grey;
+        border: 1px solid white;
+        font-family: roboto;
+        font-size: 30px;
+        font-weight: bold;
+        padding-left: 20px;
+        padding-top: 5px;
       }
 
       /* the toolbar with operations */
-      .operations {
-        height: 19px;
+      .toolbar {
+        height: 33px;
         padding: 5px;
         background: white;
-        border: 1px solid grey;
-      }
-
-      selectTheme {
-        -webkit-writing-mode: horizontal-tb !important;
-        text-rendering: auto;
-        color: -internal-light-dark-color(black, white);
-        letter-spacing: normal;
-        word-spacing: normal;
-        text-transform: none;
-        text-indent: 0px;
-        text-shadow: none;
-        display: inline-block;
-        text-align: start;
-        -webkit-appearance: menulist;
-        box-sizing: border-box;
-        align-items: center;
-        white-space: pre;
-        -webkit-rtl-ordering: logical;
-        background-color: -internal-light-dark-color(white, black);
-        cursor: default;
-        margin: 0em;
-        font: 400 13.3333px Arial;
-        border-radius: 0px;
-        border-width: 1px;
-        border-style: solid;
-        border-color: rgb(169, 169, 169);
-        border-image: initial;
-      }
-      selectLang {
-        -webkit-writing-mode: horizontal-tb !important;
-        text-rendering: auto;
-        color: -internal-light-dark-color(black, white);
-        letter-spacing: normal;
-        word-spacing: normal;
-        text-transform: none;
-        text-indent: 0px;
-        text-shadow: none;
-        display: inline-block;
-        text-align: start;
-        -webkit-appearance: menulist;
-        box-sizing: border-box;
-        align-items: center;
-        white-space: pre;
-        -webkit-rtl-ordering: logical;
-        background-color: -internal-light-dark-color(white, black);
-        cursor: default;
-        margin: 0em;
-        font: 400 13.3333px Arial;
-        border-radius: 0px;
-        border-width: 1px;
-        border-style: solid;
-        border-color: rgb(169, 169, 169);
-        border-image: initial;
+        border: 1px solid white;
+        padding-left: 20px;
       }
     </style>
   </head>
@@ -120,8 +73,8 @@
 
         
     </div>
-    <div class="operations">
-      <toolbar-component></toolbar-component>
+    <div class="toolbar">
+      <toolbar-component onclick="changeTheme()"></toolbar-component>
     </div>
     <div id="firepad-container"></div>
 
@@ -150,15 +103,8 @@
       }
 
       function changeTheme() {
-        var input = document.getElementById("selectTheme")
-        var theme = input.options[input.selectedIndex].textContent
-        codeMirror.setOption("theme", theme)
-      }
-
-      function changeLanguage() {
-        var input = document.getElementById("selectLang")
-        var lang = input.options[input.selectedIndex].textContent
-        codeMirror.setOption("mode", lang)
+        var input = document.getElementsByName('theme_change')[1].value;
+        codeMirror.setOption("theme", input)
       }
 
       // Helper to get hash from end of URL or generate a random one.

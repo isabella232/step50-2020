@@ -4,13 +4,15 @@ import {DropdownElement} from './dropdown-element.js';
 export class ToolbarComponent extends LitElement {
   static get properties() {
     return {
-      languages: {type: Array},
+      themes: {type: Array},
+      changeLabel: {type: Boolean}
     };
   }
 
   constructor() {
     super();
-    this.languages = ["python", "java"];
+    this.themes = ["neo", "monokai", "ayu-dark"];
+    this.changeLabel = false;
   }
 
   // Remove shadow DOM so styles are inherited
@@ -22,9 +24,9 @@ export class ToolbarComponent extends LitElement {
     return html`        
       <div>
         <dropdown-element 
-          .options="${this.languages}" 
-          name="language"
-          label="Languages">
+          .options="${this.themes}" 
+          name="theme_change"
+          label="Themes">
         </dropdown-element>
       </div>
     `;
