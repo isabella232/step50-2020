@@ -102,10 +102,12 @@ public class Database {
   }
 
   private static void addDocumentForUser(String hash, long userID) {
-    Query query = new Query("User").addFilter("__key__", Query.FilterOperator.EQUAL, KeyFactory.createKey("User", userID));
+    Query query = new Query("User").addFilter(
+        "__key__", Query.FilterOperator.EQUAL, KeyFactory.createKey("User", userID));
     Entity userEntity = getDatastore().prepare(query).asSingleEntity();
     ArrayList<String> docHashes = getUsersDocumentsHashes(userID);
     docHashes.add(hash);
+
     userEntity.setProperty("documents", docHashes);
     getDatastore().put(userEntity);
   }
@@ -136,7 +138,7 @@ public class Database {
     Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = getDatastore().prepare(query).asSingleEntity();
 
-    if(docEntity == null) {
+    if (docEntity == null) {
       return null;
     }
 
@@ -150,24 +152,55 @@ public class Database {
     Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = getDatastore().prepare(query).asSingleEntity();
 
-    if(docEntity == null) {
+    if (docEntity == null) {
       return null;
     }
 
     ArrayList<Long> userIDs = getListProperty(docEntity, "userIDs");
     return userIDs;
-  } 
+  }
 
   public static ArrayList<Document> getUsersDocuments(long userID) {
     ArrayList<String> docHashes = getUsersDocumentsHashes(userID);
     ArrayList<Document> docs = new ArrayList<Document>();
-    for(String hash : docHashes) {
-        Document doc = getDocumentByHash(hash);
-        docs.add(doc);
+    for (String hash : docHashes) {
+      Document doc = getDocumentByHash(hash);
+      docs.add(doc);
     }
     return docs;
   }
 
+  // Takes in a Document hash and a User email
+  // Adds the userID to the Document's list of Users
+  // Adds the Document's hash to the User's list of Documents
+  // Returns true if successful, false if the user doesn't exist
+  public static boolean shareDocument(String hash, String email) {
+    Query query = new Query("User").addFilter("email", Query.FilterOperator.EQUAL, email);
+    Entity userEntity = getDatastore().prepare(query).asSingleEntity();
+
+    if (userEntity == null) {
+      return false;
+    }
+
+    long userID = userEntity.getKey().getId();
+
+    addDocumentForUser(hash, userID);
+    addUserForDocument(hash, userID);
+
+    return true;
+  }
+
+  // Takes a Document hash and a userID
+  // Adds the userID to the Document's list of users
+  public static void addUserForDocument(String hash, long userID) {
+    Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
+    Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+    ArrayList<Long> userIDs = getDocumentUsers(hash);
+
+    userIDs.add(userID);
+    docEntity.setProperty("userIDs", userIDs);
+    getDatastore().put(docEntity);
+    
   // Datastore does not support empty collections (it will be stored as null)
   // https://cloud.google.com/appengine/docs/standard/java/datastore/entities#Using_an_empty_list
   private static ArrayList getListProperty(Entity entity, String prop) {
