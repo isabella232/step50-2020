@@ -24,8 +24,6 @@ public class SharingServlet extends HttpServlet {
     String hash = request.getParameter("documentHash");
     PrintWriter out = response.getWriter();
 
-    System.out.println(email + hash);
-
     if(Database.shareDocument(hash, email)) {
       out.println("Document shared with " + email);
     } else {
