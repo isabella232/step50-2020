@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="com.google.sps.models.*" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,6 +11,13 @@
     <script type="module" src="./components/user-home/nav-panel.js"></script>
     <script type="module" src="./components/user-home/docs-component.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+    
+    <% User user = null;
+        if (session.getAttribute("userID") != null) {
+            user = Database.getUserByID((long) session.getAttribute("userID"));
+        } else {
+          response.sendRedirect("/");  
+        } %>
   </head>
 
   <body>
@@ -20,5 +29,11 @@
         <docs-component></docs-component>
       </div>
     </div>
+
+    <script>
+      function loadDocument(documentHash) {
+        window.location.href = "/Document?documentHash=" + documentHash;
+      }
+    </script>
   </body>
 </html>
