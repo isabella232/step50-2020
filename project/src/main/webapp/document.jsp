@@ -56,6 +56,12 @@
         border: 1px solid white;
         padding-left: 20px;
       }
+
+      .return-home {
+        right: 40px;
+        top: 25px;
+        position: absolute;
+      }
     </style>
   </head>
 
@@ -71,7 +77,9 @@
           response.sendRedirect("/");  
         } %>
 
-        
+    </div>
+    <div class="return-home">
+      <a href="/"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
     </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>

@@ -10,6 +10,14 @@
     <script type="module" src="./components/user-home/docs-component.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
   </head>
+  <style>
+    .sign-out {
+      margin-top: 10px;
+      position: absolute;
+      top: 500px;
+      left: 140px;
+    }
+  </style>
 
   <body>
     <div class="columns full-width full-height">
@@ -19,6 +27,9 @@
       <div class="column is-three-quarters docs-component">
         <docs-component></docs-component>
       </div>
+    </div>
+    <div class="sign-out">
+      <a href="/"><button class="primary-blue-btn" id="demo-button"> Sign out </button></a>
     </div>
   </body>
 </html>
