@@ -17,7 +17,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
     <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="main.css" />
+    <script type="module" src="./components/toolbar-component.js"></script>
     <script src="script.js"></script>
     <style>
       html {
@@ -39,68 +41,21 @@
       .header {
         height: 45px;
         background: white;
-        border: 1px solid grey;
+        border: 1px solid white;
+        font-family: roboto;
+        font-size: 30px;
+        font-weight: bold;
+        padding-left: 20px;
+        padding-top: 5px;
       }
 
       /* the toolbar with operations */
-      .operations {
-        height: 19px;
+      .toolbar {
+        height: 33px;
         padding: 5px;
         background: white;
-        border: 1px solid grey;
-      }
-
-      selectTheme {
-        -webkit-writing-mode: horizontal-tb !important;
-        text-rendering: auto;
-        color: -internal-light-dark-color(black, white);
-        letter-spacing: normal;
-        word-spacing: normal;
-        text-transform: none;
-        text-indent: 0px;
-        text-shadow: none;
-        display: inline-block;
-        text-align: start;
-        -webkit-appearance: menulist;
-        box-sizing: border-box;
-        align-items: center;
-        white-space: pre;
-        -webkit-rtl-ordering: logical;
-        background-color: -internal-light-dark-color(white, black);
-        cursor: default;
-        margin: 0em;
-        font: 400 13.3333px Arial;
-        border-radius: 0px;
-        border-width: 1px;
-        border-style: solid;
-        border-color: rgb(169, 169, 169);
-        border-image: initial;
-      }
-      selectLang {
-        -webkit-writing-mode: horizontal-tb !important;
-        text-rendering: auto;
-        color: -internal-light-dark-color(black, white);
-        letter-spacing: normal;
-        word-spacing: normal;
-        text-transform: none;
-        text-indent: 0px;
-        text-shadow: none;
-        display: inline-block;
-        text-align: start;
-        -webkit-appearance: menulist;
-        box-sizing: border-box;
-        align-items: center;
-        white-space: pre;
-        -webkit-rtl-ordering: logical;
-        background-color: -internal-light-dark-color(white, black);
-        cursor: default;
-        margin: 0em;
-        font: 400 13.3333px Arial;
-        border-radius: 0px;
-        border-width: 1px;
-        border-style: solid;
-        border-color: rgb(169, 169, 169);
-        border-image: initial;
+        border: 1px solid white;
+        padding-left: 20px;
       }
     </style>
   </head>
@@ -118,18 +73,8 @@
         } %>
       <button onclick="showModal()"> Share </button>
     </div>
-    <div class="operations">
-      Language:
-      <select onchange="changeLanguage()" id="selectLang">
-        <option selected>python</option>
-        <option>javascript</option>
-      </select>
-      Theme:
-      <select onchange="changeTheme()" id="selectTheme">
-        <option selected>neo</option>
-        <option>ayu-dark</option>
-        <option>monokai</option>
-      </select>
+    <div class="toolbar">
+      <toolbar-component onclick="changeTheme()"></toolbar-component>
     </div>
     <div class="modal full-width full-height" id="share-modal">
       <div class="modal-background"></div>
@@ -183,15 +128,8 @@
       }
 
       function changeTheme() {
-        var input = document.getElementById("selectTheme")
-        var theme = input.options[input.selectedIndex].textContent
-        codeMirror.setOption("theme", theme)
-      }
-
-      function changeLanguage() {
-        var input = document.getElementById("selectLang")
-        var lang = input.options[input.selectedIndex].textContent
-        codeMirror.setOption("mode", lang)
+        var input = document.getElementsByName('theme_change')[1].value;
+        codeMirror.setOption("theme", input)
       }
 
       // Helper to get hash from end of URL or generate a random one.
