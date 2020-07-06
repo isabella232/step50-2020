@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://codemirror.net/theme/neo.css" />
     <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
     <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
     <link rel="stylesheet" href="main.css" />
@@ -76,27 +77,53 @@
         <% } else {
           response.sendRedirect("/");  
         } %>
-
     </div>
+      <button onclick="showModal()"> Share </button>
     <div class="return-home">
       <a href="/user-home.html#"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
     </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>
     </div>
+    <div class="modal full-width full-height" id="share-modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Share</p>
+          <button class="delete" aria-label="close" onClick="hideModal()" />
+        </header>
+        <section class="modal-card-body">
+          <form id="share-form" onsubmit="return share()">
+            <label for="email">Share with email:</label>
+            <input type="email" id="email" name="email"> 
+            <input type="submit">
+            <input type="hidden" id="documentHash" name="documentHash" value="<%= (String)request.getAttribute("documentHash") %>">
+            <p style="color: red" id="share-response"></p>
+          </form>
+        </section>
+      </div>
+    </div>
     <div id="firepad-container"></div>
 
     <script>
-      //// Create CodeMirror (with line numbers and the JavaScript mode).
       var codeMirror = CodeMirror(document.getElementById("firepad-container"), {
         lineNumbers: true,
         mode: "python",
         theme: "neo",
       })
 
+      function showModal() {
+        let modal = document.getElementById("share-modal");
+        modal.className = "modal is-active";
+      }
+
+      function hideModal() {
+        let modal = document.getElementById("share-modal");
+        modal.className = "modal";
+      }
+
       function init() {
         //// Initialize Firebase.
-        //// TODO: replace with your Firebase project configuration.
         var config = {
             apiKey: 'AIzaSyDUYns7b2bTK3Go4dvT0slDcUchEtYlSWc',
             authDomain: "step-collaborative-code-editor.firebaseapp.com",
@@ -105,8 +132,7 @@
         firebase.initializeApp(config);
 
         //// Get Firebase Database reference.
-        var firepadRef = getExampleRef()
-        //// Create Firepad.
+        var firepadRef = getRef()
         var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror)
       }
 
@@ -116,9 +142,9 @@
       }
 
       // Helper to get hash from end of URL or generate a random one.
-      function getExampleRef() {
+      function getRef() {
         var ref = firebase.database().ref()
-        var hash = window.location.hash.replace(/#/g, "")
+        var hash = "<%= (String)request.getAttribute("documentHash") %>"
         if (hash) {
           ref = ref.child(hash)
         } else {
@@ -134,6 +160,18 @@
       //Get hash of current document
       function getHash() {
         return window.location.hash.substr(2);
+      }
+
+      //Shares document with email from share-form
+      function share() {
+        var formData = new FormData(document.getElementById("share-form"));
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/Share", true);
+        xhttp.onreadystatechange = function() {
+          document.getElementById("share-response").innerHTML = this.responseText;
+        }
+        xhttp.send(formData);
+        return false;
       }
     </script>
   </body>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <% User user = null;
     if (session.getAttribute("userID") != null) {
-        user = Database.getUserByID((long) session.getAttribute("userID")); 
+        response.sendRedirect("/user-home.jsp"); 
     } %>
   </head>
     
@@ -27,10 +27,6 @@
         </div> 
       </div>
     </div>
-    
-    <% if (session.getAttribute("userID") != null) { %>
-    <p> <%= session.getAttribute("userID") %>, <%= user.getNickname() %> </p>
-    <% } %>
 
     <script>
       function load() {
