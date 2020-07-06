@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="sign-out">
-      <a href="/"><button class="primary-blue-btn" id="demo-button"> Sign out </button></a>
+      <a href="/Auth"><button class="primary-blue-btn"> Sign out </button></a>
     </div>
     <script>
       function loadDocument(documentHash) {

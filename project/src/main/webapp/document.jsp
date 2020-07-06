@@ -63,6 +63,12 @@
         top: 25px;
         position: absolute;
       }
+
+      .share{
+        position: absolute;
+        right: 160px;
+        top: 25px;
+      }
     </style>
   </head>
 
@@ -78,9 +84,11 @@
           response.sendRedirect("/");  
         } %>
     </div>
-      <button onclick="showModal()"> Share </button>
+    <div class="share">
+      <button class="white-btn" onclick="showModal()"> Share </button>
+    </div>
     <div class="return-home">
-      <a href="/user-home.html#"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
+      <a href="/user-home.jsp"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
     </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>
