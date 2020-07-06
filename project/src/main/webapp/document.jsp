@@ -79,7 +79,7 @@
 
     </div>
     <div class="return-home">
-      <a href="/"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
+      <a href="/user-home.html#"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
     </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>
