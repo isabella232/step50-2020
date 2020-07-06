@@ -27,7 +27,7 @@ public final class DocumentTest {
   @Test
   public void testGetters() {
     ArrayList<Long> userIDs = new ArrayList<Long>();
-    Document doc = new Document("new_doc", "python", "x6723hbS", userIDs);
+    Document doc = new Document("new_doc", "python", "x6723hbS", userIDs, 100000L);
 
     String name = doc.getName();
     Assert.assertEquals("new_doc", name);
@@ -38,12 +38,15 @@ public final class DocumentTest {
     String hash = doc.getHash();
     Assert.assertEquals("x6723hbS", hash);
 
+    long ownerID = doc.getOwner();
+    Assert.assertEquals(100000L, ownerID);
+
     ArrayList<Long> testUsers = doc.getUserIDs();
     Assert.assertEquals(userIDs, testUsers);
 
     ArrayList<Long> userIDs2 = new ArrayList<Long>();
     userIDs2.add(100000L);
-    Document doc2 = new Document("new_doc", "python", "x6723hbS", userIDs2);
+    Document doc2 = new Document("new_doc", "python", "x6723hbS", userIDs2, 100000L);
 
     ArrayList<Long> testUsers2 = doc2.getUserIDs();
     Assert.assertEquals(userIDs2, testUsers2);

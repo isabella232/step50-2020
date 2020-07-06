@@ -19,13 +19,17 @@ import java.util.ArrayList;
 
 public class Document{
   String language, name, hash;
+  long ownerID;
+  ArrayList<Long> editorIDs = new ArrayList<Long>();
+  ArrayList<Long> viewerIDs = new ArrayList<Long>();
   ArrayList<Long> userIDs = new ArrayList<Long>();
   
-  Document(String name, String language, String hash, ArrayList<Long> userIDs) {
+  Document(String name, String language, String hash, ArrayList<Long> userIDs, long ownerID) {
     this.name = name;
     this.language = language;
     this.hash = hash;
     this.userIDs = userIDs;
+    this.ownerID = ownerID;
   }
 
   public ArrayList<Long> getUserIDs() {
@@ -42,5 +46,9 @@ public class Document{
 
   public String getHash() {
     return hash;
+  }
+
+  public long getOwner() {
+      return ownerID;
   }
 }

@@ -51,7 +51,7 @@ public class UserHomeServlet extends HttpServlet {
     String documentID = request.getParameter("documentID");
     long userID = (long) request.getSession(false).getAttribute("userID");
     // check if null, then redirect
-    Database.createDocument(name, language, documentID, userID);
+    Database.createDocument(name, language, documentID, userID, userID);
     response.sendRedirect("/Document?documentHash=" + documentID);
   }
 }

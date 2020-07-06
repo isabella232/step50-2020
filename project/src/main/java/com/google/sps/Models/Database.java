@@ -118,7 +118,7 @@ public class Database {
   }
 
   /* Document Entity */
-  public static Document createDocument(String name, String language, String hash, long userID) {
+  public static Document createDocument(String name, String language, String hash, long userID, long ownerID) {
       // Static version where when document is shared, the userID gets appended to the array.
       Entity docEntity = new Entity("Document");
       ArrayList<Long> userIDs = new ArrayList<Long>();
@@ -126,12 +126,13 @@ public class Database {
       docEntity.setProperty("name", name);
       docEntity.setProperty("language", language);
       docEntity.setProperty("hash", hash);
+      docEntity.setProperty("ownerID", ownerID);
       userIDs.add(userID);
       docEntity.setProperty("userIDs", userIDs);
       getDatastore().put(docEntity);
 
       addDocumentForUser(hash, userID);
-      return new Document(name, language, hash, userIDs);
+      return new Document(name, language, hash, userIDs, ownerID);
   }
 
   public static Document getDocumentByHash(String hash) {
@@ -144,8 +145,9 @@ public class Database {
 
     String name = (String) docEntity.getProperty("name");
     String language = (String) docEntity.getProperty("language");
-    ArrayList<Long> userIDs = (ArrayList)docEntity.getProperty("userIDs");
-    return new Document(name, language, hash, userIDs);
+    long ownerID = (long) docEntity.getProperty("ownerID");
+    ArrayList<Long>userIDs = (ArrayList)docEntity.getProperty("userIDs");
+    return new Document(name, language, hash, userIDs, ownerID);
   }
 
   public static ArrayList<Long> getDocumentUsers(String hash) {
