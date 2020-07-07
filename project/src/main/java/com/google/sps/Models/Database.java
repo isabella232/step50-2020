@@ -118,10 +118,11 @@ public class Database {
   }
 
   /* Document Entity */
-  public static Document createDocument(String name, String language, String hash, ArrayList<Long> editorIDs, ArrayList<Long> viewerIDs, long ownerID) {
+  public static Document createDocument(String name, String language, String hash, long ownerID) {
       // Static version where when document is shared, the userID gets appended to the array.
       Entity docEntity = new Entity("Document");
-      ArrayList<Long> userIDs = new ArrayList<Long>();
+      ArrayList<Long> editorIDs = new ArrayList<Long>();
+      ArrayList<Long> viewerIDs = new ArrayList<Long>();
       
       docEntity.setProperty("name", name);
       docEntity.setProperty("language", language);
@@ -173,6 +174,10 @@ public class Database {
       docs.add(doc);
     }
     return docs;
+  }
+
+  public static void addDocumentEditor(String hash, long userID) {
+      Document doc = getDocumentByHash(hash);
   }
 
   // Takes in a Document hash and a User email

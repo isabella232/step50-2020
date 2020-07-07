@@ -99,15 +99,13 @@ public final class DatabaseTest {
   public void testCreateDocument() {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     User userA = Database.logInUser(USER_EMAIL_A, USER_NICKNAME_A);
-    ArrayList<Long> editorIDs = new ArrayList<Long>();
-    ArrayList<Long> viewerIDs = new ArrayList<Long>();
 
     // Check Document Entity for new doc
     String name = DOC_NAME_A;
     String language = DOC_LANGUAGE_A;
     String hash = DOC_HASH_A;
     long userID = userA.getUserID();
-    Database.createDocument(name, language, hash, editorIDs, viewerIDs, userID);
+    Database.createDocument(name, language, hash, userID);
 
     Query documentQuery = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = ds.prepare(documentQuery).asSingleEntity();
@@ -127,9 +125,7 @@ public final class DatabaseTest {
   public void testGetDocumentByHash() {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     User userA = Database.logInUser(USER_EMAIL_A, USER_NICKNAME_A);
-    ArrayList<Long> editorIDs = new ArrayList<Long>();
-    ArrayList<Long> viewerIDs = new ArrayList<Long>();
-    Database.createDocument(DOC_NAME_A, DOC_LANGUAGE_A, DOC_HASH_A, editorIDs, viewerIDs, userA.getUserID());
+    Database.createDocument(DOC_NAME_A, DOC_LANGUAGE_A, DOC_HASH_A, userA.getUserID());
     Document docA = Database.getDocumentByHash(DOC_HASH_A);
     Assert.assertEquals(DOC_NAME_A, docA.getName());
     Assert.assertEquals(DOC_LANGUAGE_A, docA.getLanguage());
@@ -141,9 +137,7 @@ public final class DatabaseTest {
   public void testGetDocumentUsers() {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     User userA = Database.logInUser(USER_EMAIL_A, USER_NICKNAME_A);
-    ArrayList<Long> editorIDs = new ArrayList<Long>();
-    ArrayList<Long> viewerIDs = new ArrayList<Long>();
-    Database.createDocument(DOC_NAME_A, DOC_LANGUAGE_A, DOC_HASH_A, editorIDs, viewerIDs, userA.getUserID());
+    Database.createDocument(DOC_NAME_A, DOC_LANGUAGE_A, DOC_HASH_A, userA.getUserID());
     //ArrayList<Long> userIDs = Database.getDocumentUsers(DOC_HASH_A);
     //Assert.assertTrue(userIDs.contains(userA.getUserID()) && userIDs.size() == 1);
   }
@@ -153,9 +147,7 @@ public final class DatabaseTest {
   public void testGetUsersDocuments() {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     User userA = Database.logInUser(USER_EMAIL_A, USER_NICKNAME_A);
-    ArrayList<Long> editorIDs = new ArrayList<Long>();
-    ArrayList<Long> viewerIDs = new ArrayList<Long>();
-    Database.createDocument(DOC_NAME_A, DOC_LANGUAGE_A, DOC_HASH_A, editorIDs, viewerIDs, userA.getUserID());
+    Database.createDocument(DOC_NAME_A, DOC_LANGUAGE_A, DOC_HASH_A, userA.getUserID());
     ArrayList<Document> docs = Database.getUsersDocuments(userA.getUserID());
     Document docA = docs.get(0);
     Assert.assertEquals(DOC_NAME_A, docA.getName());
