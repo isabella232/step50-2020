@@ -189,7 +189,6 @@
       //Downloads current doument
       function download() {
         var text = firepad.getText();
-        console.log(text);
 
         var contentType = 'application/octet-stream';
         var a = document.createElement('a');
