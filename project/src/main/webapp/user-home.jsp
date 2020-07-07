@@ -11,7 +11,14 @@
     <script type="module" src="./components/user-home/nav-panel.js"></script>
     <script type="module" src="./components/user-home/docs-component.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        $(document).on("click", "#log-out", function() {
+            $.get("Auth", function(responseText) {
+                $("#ajaxResponse").html(responseText);
+            });
+        });
+    </script>
     <% User user = null;
         if (session.getAttribute("userID") != null) {
             user = Database.getUserByID((long) session.getAttribute("userID"));
@@ -19,6 +26,14 @@
           response.sendRedirect("/");  
         } %>
   </head>
+  <style>
+    .sign-out {
+      margin-top: 10px;
+      position: absolute;
+      top: 500px;
+      left: 140px;
+    }
+  </style>
 
   <body>
     <div class="columns full-width full-height">
@@ -29,7 +44,10 @@
         <docs-component></docs-component>
       </div>
     </div>
-
+    <div class="sign-out">
+      <a href="/_ah/logout?continue=%2FUser"><button class="primary-blue-btn"> Sign out </button></a>
+    </div>
+    <div id="ajaxResponse"></div>
     <script>
       function loadDocument(documentHash) {
         window.location.href = "/Document?documentHash=" + documentHash;
