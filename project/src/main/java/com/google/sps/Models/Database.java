@@ -118,7 +118,7 @@ public class Database {
   }
 
   /* Document Entity */
-  public static Document createDocument(String name, String language, String hash, long userID, long ownerID) {
+  public static Document createDocument(String name, String language, String hash, ArrayList<Long> editorIDs, ArrayList<Long> viewerIDs, long ownerID) {
       // Static version where when document is shared, the userID gets appended to the array.
       Entity docEntity = new Entity("Document");
       ArrayList<Long> userIDs = new ArrayList<Long>();
@@ -127,12 +127,12 @@ public class Database {
       docEntity.setProperty("language", language);
       docEntity.setProperty("hash", hash);
       docEntity.setProperty("ownerID", ownerID);
-      userIDs.add(userID);
-      docEntity.setProperty("userIDs", userIDs);
+      docEntity.setProperty("editorIDs", editorIDs);
+      docEntity.setProperty("viewerIDs", viewerIDs);
       getDatastore().put(docEntity);
 
-      addDocumentForUser(hash, userID);
-      return new Document(name, language, hash, userIDs, ownerID);
+      addDocumentForUser(hash, ownerID);
+      return new Document(name, language, hash, editorIDs, viewerIDs, ownerID);
   }
 
   public static Document getDocumentByHash(String hash) {
@@ -146,8 +146,9 @@ public class Database {
     String name = (String) docEntity.getProperty("name");
     String language = (String) docEntity.getProperty("language");
     long ownerID = (long) docEntity.getProperty("ownerID");
-    ArrayList<Long>userIDs = (ArrayList)docEntity.getProperty("userIDs");
-    return new Document(name, language, hash, userIDs, ownerID);
+    ArrayList<Long> editorIDs = (ArrayList)docEntity.getProperty("editorIDs");
+    ArrayList<Long> viewerIDs = (ArrayList)docEntity.getProperty("viewerIDs");
+    return new Document(name, language, hash, editorIDs, viewerIDs, ownerID);
   }
 
   public static ArrayList<Long> getDocumentUsers(String hash) {
@@ -158,7 +159,9 @@ public class Database {
       return null;
     }
 
-    ArrayList<Long> userIDs = getListProperty(docEntity, "userIDs");
+    Document doc = getDocumentByHash(hash);
+    ArrayList<Long> userIDs = doc.getUserIDs();
+    //ArrayList<Long> userIDs = getListProperty(docEntity, "userIDs");
     return userIDs;
   }
 
