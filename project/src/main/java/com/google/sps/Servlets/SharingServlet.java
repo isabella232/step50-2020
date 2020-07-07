@@ -25,7 +25,7 @@ public class SharingServlet extends HttpServlet {
     String permissions = request.getParameter("permissions");
     PrintWriter out = response.getWriter();
 
-    if(Database.shareDocument(hash, email)) {
+    if(Database.shareDocument(hash, email, permissions)) {
       out.println("Document shared with " + email);
     } else {
       out.println("user specified does not exist");
