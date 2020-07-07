@@ -22,12 +22,12 @@ public class UserServlet extends HttpServlet {
       HttpSession session = request.getSession(true);
 
       String userEmail = userService.getCurrentUser().getEmail();
-      String nickname = userService.getCurrentUser().getNickname();
+      String nickname = userEmail.substring(0, userEmail.indexOf("@"));
 
       User user = Database.logInUser(userEmail, nickname);
       session.setAttribute("userID", user.getUserID());
 
-      response.sendRedirect("/user-home.html");
+      response.sendRedirect("/user-home.jsp");
 
     } else {
       request.getSession(false).invalidate();
