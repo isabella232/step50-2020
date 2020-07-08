@@ -117,9 +117,18 @@
     <div id="firepad-container"></div>
 
     <script>
+      //Map holding file types of different languages
+      var extDict = {
+        "Python": "py",
+        "Javascript": "js",
+        "Java": "java",
+        "C++": "cpp",
+        "Go": "go"
+      };
+
       var codeMirror = CodeMirror(document.getElementById("firepad-container"), {
         lineNumbers: true,
-        mode: "python",
+        mode: "<%= document.getLanguage().toLowerCase() %>",
         theme: "neo",
       })
       var firepad;
@@ -190,11 +199,13 @@
       function download() {
         var text = firepad.getText();
 
+        console.log(codeMirror.getOption("mode"));
+
         var contentType = 'application/octet-stream';
         var a = document.createElement('a');
         var blob = new Blob([text], {'type':contentType});
         a.href = window.URL.createObjectURL(blob);
-        a.download = '<%= document.getName() %>' + ".txt";
+        a.download = '<%= document.getName() %>' + "." + extDict["<%= document.getLanguage() %>"];
         a.click();
       }
     </script>
