@@ -41,6 +41,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Database {
 
+  String EDITOR = "Editor";
+  String VIEWER = "Viewer";
+
   private static DatastoreService getDatastore() {
     return DatastoreServiceFactory.getDatastoreService();
   }
@@ -234,14 +237,14 @@ public class Database {
     Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = getDatastore().prepare(query).asSingleEntity();
 
-    if (permissions == "Editor") {
+    if (permissions == EDITOR) {
       ArrayList<Long> editorIDs = getDocumentEditors(hash);
 
       editorIDs.add(userID);
       docEntity.setProperty("editorIDs", editorIDs);
       getDatastore().put(docEntity);
     }
-    else if (permissions == "Viewer") {
+    else if (permissions == VIEWER) {
       ArrayList<Long> viewerIDs = getDocumentEditors(hash);
 
       viewerIDs.add(userID);

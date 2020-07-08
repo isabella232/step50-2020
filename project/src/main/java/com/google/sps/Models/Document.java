@@ -17,7 +17,7 @@ package com.google.sps.models;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Document{
+public class Document {
   String language, name, hash;
   // Using 3 array lists because making inherited 
   // user classes seems redundant as the classes themselves 
@@ -60,7 +60,7 @@ public class Document{
     return hash;
   }
 
-  public long getOwner() {
+  public long getOwnerID() {
     return ownerID;
   }
 
