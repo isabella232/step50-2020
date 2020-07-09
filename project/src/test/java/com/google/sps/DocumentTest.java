@@ -41,7 +41,7 @@ public final class DocumentTest {
     String hash = doc.getHash();
     Assert.assertEquals("x6723hbS", hash);
 
-    long ownerID = doc.getOwner();
+    long ownerID = doc.getOwnerID();
     Assert.assertEquals(100000L, ownerID);
 
     ArrayList<Long> testUsers = doc.getUserIDs();

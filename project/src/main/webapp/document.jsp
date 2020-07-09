@@ -79,7 +79,7 @@
     </style>
   </head>
 
-  <body onload="init(); getHash()">
+  <body onload="init(); getHash(); restrict()">
     <div class="header">
       <% User user = null;
          Document document = null;
@@ -91,7 +91,7 @@
           response.sendRedirect("/");  
         } %>
     </div>
-    <div class="share">
+    <div class="share" id="share_btn">
       <button class="white-btn" onclick="showModal()"> Share </button>
     </div>
     <div class="return-home">
@@ -150,6 +150,15 @@
         //// Get Firebase Database reference.
         var firepadRef = getRef()
         var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror)
+      }
+
+      function restrict() {
+        <%if (document.getViewerIDs().contains(user.getUserID())) {
+                %>
+                  document.getElementById("firepad-container").style.pointerEvents = "none";
+                  document.getElementById("share_btn").style.visibility = "hidden";
+                <%
+            }%>
       }
 
       function changeTheme() {

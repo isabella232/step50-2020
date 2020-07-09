@@ -41,8 +41,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class Database {
 
-  String EDITOR = "Editor";
-  String VIEWER = "Viewer";
+  public static final String EDITOR = "Editor";
+  public static final String VIEWER = "Viewer";
 
   private static DatastoreService getDatastore() {
     return DatastoreServiceFactory.getDatastoreService();
@@ -150,8 +150,8 @@ public class Database {
     String name = (String) docEntity.getProperty("name");
     String language = (String) docEntity.getProperty("language");
     long ownerID = (long) docEntity.getProperty("ownerID");
-    ArrayList<Long> editorIDs = (ArrayList)docEntity.getProperty("editorIDs");
-    ArrayList<Long> viewerIDs = (ArrayList)docEntity.getProperty("viewerIDs");
+    ArrayList<Long> editorIDs = getListProperty(docEntity, "editorIDs");
+    ArrayList<Long> viewerIDs = getListProperty(docEntity, "viewerIDs");
     return new Document(name, language, hash, editorIDs, viewerIDs, ownerID);
   }
 
@@ -165,7 +165,6 @@ public class Database {
 
     Document doc = getDocumentByHash(hash);
     ArrayList<Long> userIDs = doc.getUserIDs();
-    //ArrayList<Long> userIDs = getListProperty(docEntity, "userIDs");
     return userIDs;
   }
 
@@ -179,7 +178,6 @@ public class Database {
 
     Document doc = getDocumentByHash(hash);
     ArrayList<Long> editorIDs = doc.getEditorIDs();
-    //ArrayList<Long> userIDs = getListProperty(docEntity, "userIDs");
     return editorIDs;
   }
 
@@ -193,7 +191,6 @@ public class Database {
 
     Document doc = getDocumentByHash(hash);
     ArrayList<Long> viewerIDs = doc.getViewerIDs();
-    //ArrayList<Long> userIDs = getListProperty(docEntity, "userIDs");
     return viewerIDs;
   }
 
@@ -237,15 +234,15 @@ public class Database {
     Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = getDatastore().prepare(query).asSingleEntity();
 
-    if (permissions == EDITOR) {
+    if (permissions.equals(EDITOR)) {
       ArrayList<Long> editorIDs = getDocumentEditors(hash);
 
       editorIDs.add(userID);
       docEntity.setProperty("editorIDs", editorIDs);
       getDatastore().put(docEntity);
     }
-    else if (permissions == VIEWER) {
-      ArrayList<Long> viewerIDs = getDocumentEditors(hash);
+    else if (permissions.equals(VIEWER)) {
+      ArrayList<Long> viewerIDs = getDocumentViewers(hash);
 
       viewerIDs.add(userID);
       docEntity.setProperty("viewerIDs", viewerIDs);
