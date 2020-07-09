@@ -196,8 +196,6 @@
       function download() {
         var text = firepad.getText();
 
-        console.log(codeMirror.getOption("mode"));
-
         var contentType = 'application/octet-stream';
         var a = document.createElement('a');
         var blob = new Blob([text], {'type':contentType});
