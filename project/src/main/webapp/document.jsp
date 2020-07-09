@@ -84,11 +84,11 @@
         <% } else {
           response.sendRedirect("/");  
         } %>
-        <div class="btn-group">
-          <button class="white-btn" onclick="showModal()"> Share </button>
-          <a href="/user-home.jsp"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
-          <button class="white-btn" onclick="download()"> <i class="fa fa-download" aria-hidden="true"></i> </button>
-        </div>
+      <div class="btn-group">
+        <button class="white-btn" onclick="showModal()"> Share </button>
+        <a href="/user-home.jsp"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
+        <button class="white-btn" onclick="download()"> <i class="fa fa-download" aria-hidden="true"></i> </button>
+      </div>
     </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>
