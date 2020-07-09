@@ -97,6 +97,9 @@
     <div class="return-home">
       <a href="/user-home.jsp"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
     </div>
+    <div class="share">
+      <button class="white-btn" onclick="download()"> Download </a>
+    </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>
     </div>
@@ -122,11 +125,21 @@
     <div id="firepad-container"></div>
 
     <script>
+      //Map holding file types of different languages
+      var extDict = {
+        "Python": "py",
+        "Javascript": "js",
+        "Java": "java",
+        "C++": "cpp",
+        "Go": "go"
+      };
+
       var codeMirror = CodeMirror(document.getElementById("firepad-container"), {
         lineNumbers: true,
-        mode: "python",
+        mode: "<%= document.getLanguage().toLowerCase() %>",
         theme: "neo",
       })
+      var firepad;
 
       function showModal() {
         let modal = document.getElementById("share-modal");
@@ -149,7 +162,7 @@
 
         //// Get Firebase Database reference.
         var firepadRef = getRef()
-        var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror)
+        firepad = Firepad.fromCodeMirror(firepadRef, codeMirror)
       }
 
       function restrict() {
@@ -197,6 +210,20 @@
         }
         xhttp.send(formData);
         return false;
+      }
+
+      //Downloads current doument
+      function download() {
+        var text = firepad.getText();
+
+        console.log(codeMirror.getOption("mode"));
+
+        var contentType = 'application/octet-stream';
+        var a = document.createElement('a');
+        var blob = new Blob([text], {'type':contentType});
+        a.href = window.URL.createObjectURL(blob);
+        a.download = '<%= document.getName() %>' + "." + extDict["<%= document.getLanguage() %>"];
+        a.click();
       }
     </script>
   </body>
