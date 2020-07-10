@@ -45,12 +45,19 @@
       </div>
     </div>
     <div class="sign-out">
-      <a href="/_ah/logout?continue=%2FUser"><button class="primary-blue-btn"> Sign out </button></a>
+      <a href="/_ah/logout?continue=https://accounts.google.com/Logout%3Fcontinue%3Dhttps://appengine.google.com/_ah/logout%253Fcontinue%253Dhttps://google.com/url%25253Fsa%25253DD%252526q%25253Dhttps://step-collaborative-code-editor.uc.r.appspot.com/User%252526ust%25253D1594489239991384%252526usg%25253DAFQjCNErDNx1Pps-gTuvqlRbUPIe01wpgA%26service%3Dah"><button class="primary-blue-btn"> Sign out </button></a>
     </div>
     <div id="ajaxResponse"></div>
     <script>
       function loadDocument(documentHash) {
         window.location.href = "/Document?documentHash=" + documentHash;
+      }
+      
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function() {
+          console.log('User signed out.');
+        });
       }
     </script>
   </body>
