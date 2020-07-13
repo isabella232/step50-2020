@@ -76,6 +76,55 @@
           right : 60px;
           top : 84px;
       }
+
+      .versioning {
+        display: none;
+        background-color: white;
+        z-index: 1;
+        width: 300px;
+        height: 660px;
+        position: absolute;
+        right: 10px;
+        border: solid;
+        border-color: grey;
+      }
+
+      .verion-btn {
+        left: 110px;
+        top: 55px;
+        position: absolute;
+      }
+
+      .close {
+        position: absolute;
+        top: 0;
+        right: 14px;
+        font-size: 42px;
+        transform: rotate(45deg);
+        cursor: pointer;
+      }
+
+      .versionHeader {
+        border-bottom-color: grey;
+        border-bottom: solid;
+        height: 75px;
+        width: 300px;
+        padding-top: 23px;
+        padding-left: 20px;
+        font-size: 18px;
+      }
+
+      .commitMessage {
+        position : absolute;
+        right: 37px;
+        top: 550px;
+      }
+
+      .commitButton {
+        position : absolute;
+        top: 600px;
+        right : 114px;
+      }
     </style>
   </head>
 
@@ -102,6 +151,7 @@
     </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>
+      <button class="verion-btn" onclick="showVersioning()">Versioning</button>
     </div>
     <div class="modal full-width full-height" id="share-modal">
       <div class="modal-background"></div>
@@ -122,7 +172,20 @@
         </section>
       </div>
     </div>
+    <div class="versioning" id="versioning-block">
+      <div class="close" onclick="closeVersioning()">+</div>
+      <div class="versionHeader">
+        <p>Revisions</p>
+      </div>
+      <div class="commitButton">
+        <button class="primary-blue-btn full-width" id="commit-button"> Commit </button>
+      </div>
+      <div class="commitMessage">
+        <input class="white-input full-width" placeholder="Type a commit message..." id="commit-msg"></input>
+      </div>
+    </div>
     <div id="firepad-container"></div>
+    
 
     <script>
       //Map holding file types of different languages
@@ -225,6 +288,15 @@
         a.download = '<%= document.getName() %>' + "." + extDict["<%= document.getLanguage() %>"];
         a.click();
       }
+
+      function showVersioning() {
+        document.querySelector('.versioning').style.display = 'flex';
+      }
+
+      function closeVersioning() {
+        document.querySelector('.versioning').style.display = 'none';
+      }
+
     </script>
   </body>
 </html>
