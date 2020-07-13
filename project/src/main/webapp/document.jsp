@@ -130,6 +130,7 @@
       .commits {
         right : 76px;
         top : 23px;
+        position : absolute;
       }
     </style>
   </head>
