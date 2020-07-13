@@ -97,11 +97,8 @@
 
       .close {
         position: absolute;
-        top: 0;
-        right: 14px;
-        font-size: 42px;
-        transform: rotate(45deg);
-        cursor: pointer;
+        top: 25px;
+        right: 11px;
       }
 
       .versionHeader {
@@ -116,14 +113,23 @@
 
       .commitMessage {
         position : absolute;
-        right: 37px;
+        right: 4px;
         top: 550px;
       }
 
       .commitButton {
         position : absolute;
         top: 600px;
-        right : 114px;
+        right : 4px;
+      }
+
+      .revisions {
+        border-color: grey;
+      }
+
+      .commits {
+        right : 76px;
+        top : 23px;
       }
     </style>
   </head>
@@ -173,15 +179,22 @@
       </div>
     </div>
     <div class="versioning" id="versioning-block">
-      <div class="close" onclick="closeVersioning()">+</div>
+      <div class="close">
+        <button class="delete" onclick="closeVersioning()"></button>
+      </div>
       <div class="versionHeader">
-        <p>Revisions</p>
+        <div class="revisions">
+          <button class="text-btn" id="revisions-button"> Revisions </button>
+        </div>
+        <div class="commits">
+          <button class="text-btn" id="commits-button"> Commits </button>
+        </div>
       </div>
-      <div class="commitButton">
-        <button class="primary-blue-btn full-width" id="commit-button"> Commit </button>
+      <div class="commitButton three-width">
+        <button class="primary-blue-btn three-width" id="commit-button"> Commit </button>
       </div>
-      <div class="commitMessage">
-        <input class="white-input full-width" placeholder="Type a commit message..." id="commit-msg"></input>
+      <div class="commitMessage three-width">
+        <input class="white-input three-width" placeholder="Type a commit message..." id="commit-msg"></input>
       </div>
     </div>
     <div id="firepad-container"></div>
