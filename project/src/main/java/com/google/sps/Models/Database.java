@@ -134,6 +134,12 @@ public class Database {
       ArrayList<Long> viewerIDs = new ArrayList<Long>();
       long folderID = Folder.DEFAULT_FOLDER_ID;
       
+      if(language.equals("C++")) {
+          language = "text/x-c++src";
+      } else if(language.equals("Java")) {
+          language = "text/x-java";
+      }
+
       docEntity.setProperty("name", name);
       docEntity.setProperty("language", language);
       docEntity.setProperty("hash", hash);
