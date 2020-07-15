@@ -110,6 +110,16 @@ public class Database {
     return new User(email, nickname, userID, docHashes, folderIDs);
   }
 
+  public static Comment createComment(long userID, String data) {
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("userID", userID);
+    commentEntity.setProperty("data", data);
+      
+    getDatastore().put(commentEntity);
+    long commentID = commentEntity.getKey().getId();
+    return new Comment(commentID, userID, data);
+  }
+
   private static void addDocumentForUser(String hash, long userID) {
     Query query = new Query("User").addFilter(
         "__key__", Query.FilterOperator.EQUAL, KeyFactory.createKey("User", userID));
@@ -132,6 +142,7 @@ public class Database {
       Entity docEntity = new Entity("Document");
       ArrayList<Long> editorIDs = new ArrayList<Long>();
       ArrayList<Long> viewerIDs = new ArrayList<Long>();
+      ArrayList<Long> commentIDs = new ArrayList<Long>();
       long folderID = Folder.DEFAULT_FOLDER_ID;
       
       if(language.equals("C++")) {
@@ -146,11 +157,12 @@ public class Database {
       docEntity.setProperty("ownerID", ownerID);
       docEntity.setProperty("editorIDs", editorIDs);
       docEntity.setProperty("viewerIDs", viewerIDs);
+      docEntity.setProperty("commentIDs", commentIDs);
       docEntity.setProperty("folderID", folderID);
       getDatastore().put(docEntity);
 
       addDocumentForUser(hash, ownerID);
-      return new Document(name, language, hash, editorIDs, viewerIDs, ownerID, folderID);
+      return new Document(name, language, hash, editorIDs, viewerIDs, commentIDs, ownerID, folderID);
   }
 
   public static Document getDocumentByHash(String hash) {
@@ -166,8 +178,9 @@ public class Database {
     long ownerID = (long) docEntity.getProperty("ownerID");
     ArrayList<Long> editorIDs = getListProperty(docEntity, "editorIDs");
     ArrayList<Long> viewerIDs = getListProperty(docEntity, "viewerIDs");
+    ArrayList<Long> commentIDs = getListProperty(docEntity, "commentIDs");
     long folderID = (long) docEntity.getProperty("folderID");
-    return new Document(name, language, hash, editorIDs, viewerIDs, ownerID, folderID);
+    return new Document(name, language, hash, editorIDs, viewerIDs, commentIDs, ownerID, folderID);
   }
 
   private static ArrayList<Document> getDocumentsByHash(ArrayList<String> docHashes) {
@@ -267,6 +280,15 @@ public class Database {
       docEntity.setProperty("viewerIDs", viewerIDs);
       getDatastore().put(docEntity);
     }
+  }
+
+  public static void addCommentOnDocument(String hash, long commentID) {
+    Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
+    Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+    ArrayList<Long> commentIDs = getDocumentByHash(hash).getCommentIDs();
+    commentIDs.add(commentID);
+    docEntity.setProperty("commentIDs", commentIDs);
+    getDatastore().put(docEntity);
   }
     
   /* Folder Entity */
