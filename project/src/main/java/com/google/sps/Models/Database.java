@@ -95,6 +95,21 @@ public class Database {
     return new User(email, nickname, userID, docHashes, folderIDs);
   }
 
+  public static Comment getCommentbyID(long commentID) {
+    Query query = new Query("Comment").addFilter(
+        "__key__", Query.FilterOperator.EQUAL, KeyFactory.createKey("Comment", commentID));
+    Entity commentEntity = getDatastore().prepare(query).asSingleEntity();
+
+    if (commentEntity == null) {
+        return null;
+    }
+
+    String data = (String) commentEntity.getProperty("data");
+    long userID = (Long) commentEntity.getProperty("userID");
+
+    return new Comment(commentID, userID, data);
+  }
+
   private static User createUser(String email, String nickname) {
     Entity userEntity = new Entity("User");
     ArrayList<String> docHashes = new ArrayList<String>();
