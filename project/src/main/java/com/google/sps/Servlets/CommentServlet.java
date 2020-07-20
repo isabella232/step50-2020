@@ -21,7 +21,7 @@ public class CommentServlet extends HttpServlet {
 
     long userID = (long) request.getSession(false).getAttribute("userID");
     String commentData = request.getParameter("commentData");
-    Date date = request.getParameter("date");
+    String date = request.getParameter("date");
 
     long commentID = Database.createComment(userID, commentData, date);
 
