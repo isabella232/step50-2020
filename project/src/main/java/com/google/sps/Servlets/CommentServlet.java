@@ -6,6 +6,7 @@ import com.google.gson.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,9 @@ public class CommentServlet extends HttpServlet {
 
     long userID = (long) request.getSession(false).getAttribute("userID");
     String commentData = request.getParameter("commentData");
-    long commentID = Database.createComment(userID, commentData);
+    Date date = request.getParameter("date");
+
+    long commentID = Database.createComment(userID, commentData, date);
 
     out.println(commentID);
   }
