@@ -106,8 +106,9 @@ public class Database {
 
     String data = (String) commentEntity.getProperty("data");
     long userID = (Long) commentEntity.getProperty("userID");
+    Date date = (Date) commentEntity.getProperty("date");
 
-    return new Comment(commentID, userID, data);
+    return new Comment(commentID, userID, data, date);
   }
 
   private static User createUser(String email, String nickname) {
@@ -125,14 +126,15 @@ public class Database {
     return new User(email, nickname, userID, docHashes, folderIDs);
   }
 
-  public static Comment createComment(long userID, String data) {
+  public static long createComment(long userID, String data, Date date) {
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("userID", userID);
     commentEntity.setProperty("data", data);
+    commentEntity.setProperty("date", date);
       
     getDatastore().put(commentEntity);
     long commentID = commentEntity.getKey().getId();
-    return new Comment(commentID, userID, data);
+    return commentID;
   }
 
   private static void addDocumentForUser(String hash, long userID) {

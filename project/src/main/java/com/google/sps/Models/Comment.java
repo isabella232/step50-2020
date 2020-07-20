@@ -14,14 +14,18 @@
 
 package com.google.sps.models;
 
+import java.util.Date;
+
 public class Comment {
   long commentID, userID;
   String data;
+  Date date;
 
-  Comment(long commentID, long userID, String data) {
+  Comment(long commentID, long userID, String data, Date date) {
     this.commentID = commentID;
     this.userID = userID;
     this.data = data;
+    this.date = date;
   }
 
   public long getCommentID() {
@@ -34,5 +38,9 @@ public class Comment {
 
   public String getData() {
     return data;
+  }
+
+  public Date getDate() {
+    return date;
   }
 }
