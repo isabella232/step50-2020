@@ -1,0 +1,104 @@
+#firepad-container 
+  width: 70%
+  height: 100%
+
+.top-container
+  border-bottom: 2px solid $medium-gray
+  
+/* Header/Logo Title */
+.header
+  height: 45px
+  background: white
+  font-family: roboto
+  font-size: 30px
+  font-weight: bold
+  padding-left: 20px
+  padding-top: 5px
+
+/* the toolbar with operations */
+.toolbar
+  height: 33px
+  padding: 5px
+  background: white
+  border: 1px solid white
+  padding-left: 20px
+
+.btn-group 
+  float: right
+  display: flex
+  justify-content: space-between
+  width: 290px
+  margin-right: 25px
+  margin-top: 5px
+  a
+    margin-top: -10px
+
+.permissions
+  position: absolute
+  right : 60px
+  top : 84px
+
+.comment
+  background-color: yellow
+
+.comment-container
+  position: absolute;
+  right: 240px;
+
+.versioning
+  display: none
+  background-color: white
+  z-index: 1
+  width: 20%
+  height: 100%
+  position: absolute
+  right: 0
+  border: 2px solid $medium-gray
+  flex-direction: column
+  .close
+    position: absolute
+    right: 10px
+    top: 10px
+  .versioning-header
+    border-bottom: 2px solid $medium-gray
+    height: 50px
+    padding: 10px 20px
+    .versioning-header-toggle
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      width: 75%
+  .versioning-description
+    border-bottom: 2px solid $medium-gray
+    font-size: $normal - 2
+    font-style: italic
+    padding: 10px 20px
+  .versioning-group
+    margin: 20px
+    ul
+      overflow: scroll
+      max-height: 450px
+      li
+        display: flex
+        justify-content: space-between
+        padding-right: 10px
+        margin-bottom: 10px
+  .revision-btn-group
+    padding: 20px
+    position: absolute
+    bottom: 150px
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    height: 160px
+  .commit-btn-bottom
+    position: absolute
+    bottom: 150px
+    padding: 20px
+    width: 100%
+  .revisions
+    border-color: $medium-gray
+  .commits
+    right: 76px
+    top: 23px
+    position: absolute

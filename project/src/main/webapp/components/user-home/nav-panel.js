@@ -6,21 +6,21 @@ export class NavPanel extends LitElement {
   static get properties() {
     return {
       languages: {type: Array},
-      documentID: {type: String},
+      docHash: {type: String},
       formDisabled: {type: String},
       validTitle: {type: Boolean},
       validDropdown: {type: Boolean},
       value: {type: String},
       valueID: {type: Number},
-      defaultFolderID: {type: Number},
       folders: {type: Array},
+      defaultFolderID: {type: Number},
     };
   }
 
   constructor() {
     super();
     this.languages = ['C++', 'Go', 'Python', 'Java', 'Javascript'];
-    this.documentID = '';
+    this.docHash = '';
     this.placeholder = 'Write a document title...';
     this.formDisabled = '';
     this.validTitle = false;
@@ -41,10 +41,10 @@ export class NavPanel extends LitElement {
     if (firebase.apps.length === 0) {
       firebase.initializeApp(config);
     }
-    this.documentID = this.createDocumentID();
+    this.docHash= this.createDocHash();
   }
 
-  createDocumentID() {
+  createDocHash() {
     var ref = firebase.database().ref();
     ref = ref.push();  // generate unique location.
     return ref.key;
@@ -67,7 +67,7 @@ export class NavPanel extends LitElement {
   }
 
   setPanelValueAsMyDocs() {
-    this.value = '';
+    this.value = 'My Code Docs';
     this.valueID = this.defaultFolderID;
     this.createEvent('toggle-folder');
   }
@@ -83,6 +83,7 @@ export class NavPanel extends LitElement {
       <div>
         <form class="new-doc-group" id="new-doc-form" action="/UserHome" method="POST" onsubmit=${
         this.createDocument()}>
+          <input type="hidden" name="folderID" value=${this.valueID}>
           <input 
             @change=${(e) => this.validateTitle(e)} 
             name="title" id="new-doc-title" 
@@ -98,7 +99,7 @@ export class NavPanel extends LitElement {
             styling="full-width"
           >
           </dropdown-element>
-          <input type="hidden" name="documentID" value=${this.documentID}>
+          <input type="hidden" name="docHash" value=${this.docHash}>
           ${ disableSubmit ? 
             html`
               <button id="new-doc-submit" class="primary-blue-btn full-width disabled" disabled> + New doc</button>
@@ -109,7 +110,7 @@ export class NavPanel extends LitElement {
           }
         </form>
         <div class="nav-btn-group">
-          <button class="text-btn full-width" @click="${this.setPanelValueAsMyDocs}"> My code docs </button>
+          <button class="text-btn full-width" @click="${this.setPanelValueAsMyDocs}"> My Code Docs </button>
           <div class="folder-btn-group">
             <panel-element 
               @change=${(e) => this.setPanelValue(e)}
