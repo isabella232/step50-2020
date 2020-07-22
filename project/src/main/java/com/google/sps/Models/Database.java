@@ -126,7 +126,7 @@ public class Database {
     return new User(email, nickname, userID, docHashes, folderIDs);
   }
 
-  public static long createComment(long userID, String data, String date) {
+  public static long createComment(long userID, String data, String date, String hash) {
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("userID", userID);
     commentEntity.setProperty("data", data);
@@ -134,6 +134,7 @@ public class Database {
       
     getDatastore().put(commentEntity);
     long commentID = commentEntity.getKey().getId();
+    addCommentOnDocument(hash, commentID);
     return commentID;
   }
 
@@ -409,7 +410,7 @@ public class Database {
   }
 
   // Returns an ArrayList of a Document's Comments
-  public static ArrayList<Comment> getDocumentsComments(String hash) {
+  public static ArrayList<Comment> getDocumentComments(String hash) {
     Document document = getDocumentByHash(hash);
     ArrayList<Long> commentIDs = document.getCommentIDs();
     ArrayList<Comment> commentObjects = new ArrayList<Comment>();

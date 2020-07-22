@@ -24,7 +24,11 @@ import javax.servlet.http.HttpServletResponse;
 public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String hash = request.getParameter("hash");
+    String hash = request.getParameter("documentHash");
+    ArrayList<Comment> comments = Database.getDocumentComments(hash);
+    
+    response.setContentType("application/json;");
+    response.getWriter().println(convertToJson(comments));
   }
 
   @Override
@@ -35,9 +39,16 @@ public class CommentServlet extends HttpServlet {
     long userID = (long) request.getSession(false).getAttribute("userID");
     String commentData = request.getParameter("commentData");
     String date = request.getParameter("commentDate");
+    String hash = request.getParameter("documentHash");
 
-    long commentID = Database.createComment(userID, commentData, date);
+    long commentID = Database.createComment(userID, commentData, date, hash);
 
     out.println(commentID);
+  }
+
+  private String convertToJson(Object obj) {
+    Gson gson = new Gson();
+    String json = gson.toJson(obj);
+    return json;
   }
 }
