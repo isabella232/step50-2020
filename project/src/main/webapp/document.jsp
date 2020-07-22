@@ -25,122 +25,11 @@
     <script src="closebrackets.js"></script>
     <script src="matchbrackets.js"></script>
     <script type="module" src="./components/comment-component.js"></script>
+    <script type="module" src="./components/document/versioning-component.js"></script>
     <script src="script.js"></script>
-    <style>
-      html {
-        height: 100%;
-      }
-      body {
-        margin: 0;
-        height: 100%;
-        position: relative;
-      }
-      /* Height / width / positioning can be customized for your use case.
-          For demo purposes, we make firepad fill the entire browser. */
-      #firepad-container {
-        width: 100%;
-        height: 100%;
-      }
-
-      /* Header/Logo Title */
-      .header {
-        height: 45px;
-        background: white;
-        border: 1px solid white;
-        font-family: roboto;
-        font-size: 30px;
-        font-weight: bold;
-        padding-left: 20px;
-        padding-top: 5px;
-      }
-
-      /* the toolbar with operations */
-      .toolbar {
-        height: 33px;
-        padding: 5px;
-        background: white;
-        border: 1px solid white;
-        padding-left: 20px;
-      }
-
-      .btn-group {
-        float: right;
-        display: flex;
-        justify-content: space-between;
-        width: 215px;
-        margin-right: 25px;
-        margin-top: 5px
-      }
-
-      a {
-        margin-top: -10px;
-      }
-
-      .permissions {
-          position: absolute;
-          right : 60px;
-          top : 84px;
-      }
-
-      .versioning {
-        display: none;
-        background-color: white;
-        z-index: 1;
-        width: 300px;
-        height: 660px;
-        position: absolute;
-        right: 10px;
-        border: solid;
-        border-color: grey;
-      }
-
-      .verion-btn {
-        left: 110px;
-        top: 55px;
-        position: absolute;
-      }
-
-      .close {
-        position: absolute;
-        top: 25px;
-        right: 11px;
-      }
-
-      .versionHeader {
-        border-bottom-color: grey;
-        border-bottom: solid;
-        height: 75px;
-        width: 300px;
-        padding-top: 23px;
-        padding-left: 20px;
-        font-size: 18px;
-      }
-
-      .commitMessage {
-        position : absolute;
-        right: 4px;
-        top: 550px;
-      }
-
-      .commitButton {
-        position : absolute;
-        top: 600px;
-        right : 4px;
-      }
-
-      .revisions {
-        border-color: grey;
-      }
-
-      .commits {
-        right : 76px;
-        top : 23px;
-        position : absolute;
-      }
-    </style>
   </head>
 
-  <body onload="init(); getHash(); restrict()">
+  <body onload="init(); getHash(); restrict(); initializeVersioning()">
     <div class="header">
       <% User user = null;
          Document document = null;
@@ -159,7 +48,7 @@
     </div>
     <div class="toolbar">
       <toolbar-component onclick="changeTheme()"></toolbar-component>
-      <button class="verion-btn" onclick="showVersioning()">Versioning</button>
+      <button class="version-btn" onclick="showVersioning()">Versioning</button>
     </div>
     <div class="modal full-width full-height" id="share-modal">
       <div class="modal-background"></div>
@@ -180,28 +69,9 @@
         </section>
       </div>
     </div>
-    <div class="versioning" id="versioning-block">
-      <div class="close">
-        <button class="delete" onclick="closeVersioning()"></button>
-      </div>
-      <div class="versionHeader">
-        <div class="revisions">
-          <button class="text-btn" id="revisions-button"> Revisions </button>
-        </div>
-        <div class="commits">
-          <button class="text-btn" id="commits-button"> Commits </button>
-        </div>
-      </div>
-      <div class="commitButton three-width">
-        <button class="primary-blue-btn three-width" id="commit-button"> Commit </button>
-      </div>
-      <div class="commitMessage three-width">
-        <input class="white-input three-width" placeholder="Type a commit message..." id="commit-msg"></input>
-      </div>
-    </div>
+    <versioning-component onclose="init()"></versioning-component>
     <div id="firepad-container"></div>
     
-
     <script>
       //Map holding file types of different languages
       var extDict = {
@@ -234,16 +104,18 @@
 
       function init() {
         //// Initialize Firebase.
-        var config = {
+        if (firebase.apps.length === 0) {
+          var config = {
             apiKey: 'AIzaSyDUYns7b2bTK3Go4dvT0slDcUchEtYlSWc',
             authDomain: "step-collaborative-code-editor.firebaseapp.com",
             databaseURL: "https://step-collaborative-code-editor.firebaseio.com"
-        };
-        firebase.initializeApp(config);
-
+          };
+          firebase.initializeApp(config);
+        }
         //// Get Firebase Database reference.
-        var firepadRef = getRef()
-        firepad = Firepad.fromCodeMirror(firepadRef, codeMirror)
+        var firepadRef = getRef();
+        codeMirror.setValue('');
+        firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
       }
 
       function restrict() {
@@ -305,12 +177,68 @@
         a.click();
       }
 
+      /* Versioning Functions */
+      var groupedRevisions = [];
+      var revisionsMap = new Map();
+      var commits = [];
       function showVersioning() {
+        document.querySelector('versioning-component').firepad = firepad;
+        document.querySelector('versioning-component').codeMirror = codeMirror;
+        document.querySelector('versioning-component').groupedRevisions = groupedRevisions;
+        document.querySelector('versioning-component').revisionsMap = revisionsMap;
+        document.querySelector('versioning-component').commits = commits;
         document.querySelector('.versioning').style.display = 'flex';
       }
 
-      function closeVersioning() {
-        document.querySelector('.versioning').style.display = 'none';
+      async function initializeVersioning() {
+        await getRevisions();
+        await getCommits();
+      }
+
+      async function getRevisions() {
+        const firepadRef = getRef();
+        firepadRef.child('history').on('child_added', (snapshot) => {
+          addRevision(snapshot.key, snapshot.val());
+        });
+        return groupedRevisions;
+      }
+
+      const intervalMinutes = 30;
+      const minutesToMilliseconds = 60000;
+      const interval = intervalMinutes * minutesToMilliseconds;
+      var earliestTime = -Infinity;
+      var groupCounter = 0; 
+      function addRevision(hash, value) {
+        value.group = groupCounter;
+        revisionsMap.set(hash, value);
+        if (value.t - earliestTime > interval) {
+          const newRevisionGroup = {"hash": hash, "timestamp": value.t};
+          groupedRevisions.unshift(newRevisionGroup);
+          groupCounter += 1;
+          earliestTime = value.t;
+          revisionsMap.set(hash, value);
+        } else {
+          const prevRevisionGroup = groupedRevisions[0];
+          prevRevisionGroup.hash = hash;
+        }
+        document.querySelector('versioning-component').groupedRevisions = groupedRevisions;
+        document.querySelector('versioning-component').revisionsMap = revisionsMap;
+        document.querySelector('versioning-component').requestUpdate();
+      }
+
+      async function getCommits() {
+        const firepadRef = getRef();
+        firepadRef.child('commit').on('child_added', (snapshot) => {
+          addCommit(snapshot.key, snapshot.val());
+        });
+        return commits;
+      }
+
+      function addCommit(hash, value) {
+        value.hash = hash;
+        commits.unshift(value);
+        document.querySelector('versioning-component').commits = commits;
+        document.querySelector('versioning-component').requestUpdate();
       }
 
     </script>
