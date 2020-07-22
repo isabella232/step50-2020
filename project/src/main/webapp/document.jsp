@@ -164,7 +164,9 @@
         var xhttp = new XMLHttpRequest();
         xhttp.open("POST", "/Share", true);
         xhttp.onreadystatechange = function() {
-          document.getElementById("share-response").innerHTML = this.responseText;
+          if(xhttp.readyState == 4 && xhttp.status == 200) {
+            document.getElementById("share-response").innerHTML = this.responseText;
+          }
         }
         xhttp.send(formData);
         return false;
@@ -184,6 +186,13 @@
 
       //Create comment
       function comment() {
+        var date = new Intl.DateTimeFormat('en-US', {
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric'
+        }).format(new Date());
+  
         var startPos = codeMirror.getCursor(true);
         var endPos = codeMirror.getCursor(false);
         endPos.ch += 1;
@@ -203,7 +212,7 @@
         }
 
         // Create comment getElementsByName
-        document.getElementById('comment-container').innerHTML += '<comment-component name="<%= user.getNickname() %>"></comment-component>';
+        document.getElementById('comment-container').innerHTML += '<comment-component name="<%= user.getNickname() %>" hash="<%= (String)request.getAttribute("documentHash") %>" date="' + date + '"></comment-component>';
         document.querySelector('comment-component').firepad = firepad;
         document.querySelector('comment-component').codeMirror = codeMirror;
       }
@@ -279,6 +288,16 @@
           codeMirror.markText({line: endMarker.line, ch: endMarker.ch}, {line: endMarker.line, ch: endMarker.ch+2}, {readOnly: true});
           codeMirror.markText({line: startMarker.line, ch: startMarker.ch-1}, {line: startMarker.line, ch: startMarker.ch+1}, {readOnly: true});
         }
+
+        // Load comments themselves
+        /* var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/Comment", true);
+        xhttp.onreadystatechange = function() {
+          if(xhttp.readyState == 4 && xhttp.status == 200) {
+            //get JSON and loop through to create comment componenets
+          }
+        }
+        xhttp.send(); */
       }
 
       // Finds matching endpoint for comment with given ID
