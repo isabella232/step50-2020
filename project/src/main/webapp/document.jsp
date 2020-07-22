@@ -290,14 +290,21 @@
         }
 
         // Load comments themselves
-        /* var xhttp = new XMLHttpRequest();
+        var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "/Comment", true);
         xhttp.onreadystatechange = function() {
           if(xhttp.readyState == 4 && xhttp.status == 200) {
             //get JSON and loop through to create comment componenets
+            var commentList = this.responseText;
+            for(var i = 0; i < commentList.length; i++) {
+              var comment = commentList[i];
+              document.getElementById('comment-container').innerHTML += '<comment-component name="'+ comment[userID] +'" date="' + comment[commentDate] + '" text="'+ comment[commentData] +'"></comment-component>';
+              document.querySelector('comment-component').firepad = firepad;
+              document.querySelector('comment-component').codeMirror = codeMirror;
+            }
           }
         }
-        xhttp.send(); */
+        xhttp.send();
       }
 
       // Finds matching endpoint for comment with given ID

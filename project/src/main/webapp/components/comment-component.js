@@ -36,7 +36,6 @@ export class CommentComponent extends LitElement {
           <p class="comment-name">${this.name}</p>
           <p class="comment-date">${this.date}</p>
           <input type="hidden" id="commentDate" name="commentDate" value="${this.date}">
-          <input type="hidden" id="documentHash" name="documentHash" value="${this.hash}">
           <div class="comment-delete">
             <button class="delete"></button>
           </div>
@@ -47,7 +46,8 @@ export class CommentComponent extends LitElement {
             placeholder=${this.placeholder}
             autocomplete="off" 
           ></input>
-          <input type="submit">Submit</input>`
+          <input type="submit">Submit</input>
+          <input type="hidden" id="documentHash" name="documentHash" value="${this.hash}">`
           }
         </div>
       </form>
