@@ -32,7 +32,8 @@
 
   <body onload="init(); getHash(); restrict(); initializeVersioning(); setTimeout(function(){ loadComments() }, 2000)">
     <div class="header">
-      <% User userasdfasdfasasdment document = null;
+      <% User user = null;
+         Document document = null;
         if (session.getAttribute("userID") != null) {
             user = Database.getUserByID((long) session.getAttribute("userID"));
             document = Database.getDocumentByHash((String)request.getAttribute("documentHash")); %>
