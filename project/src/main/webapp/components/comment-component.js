@@ -46,7 +46,7 @@ export class CommentComponent extends LitElement {
             placeholder=${this.placeholder}
             autocomplete="off" 
           ></input>
-          <input type="submit">Submit</input>
+          <input class="primary-blue-btn comment-btn"type="submit"></input>
           <input type="hidden" id="documentHash" name="documentHash" value="${this.hash}">`
           }
         </div>
