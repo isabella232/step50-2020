@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String hash = 
+    String hash = request.getParameter("hash");
   }
 
   @Override

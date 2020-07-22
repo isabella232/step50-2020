@@ -407,4 +407,15 @@ public class Database {
       return items;
     }
   }
+
+  // Returns an ArrayList of a Document's Comments
+  public static ArrayList<Comment> getDocumentsComments(String hash) {
+    Document document = getDocumentByHash(hash);
+    ArrayList<Long> commentIDs = document.getCommentIDs();
+    ArrayList<Comment> commentObjects = new ArrayList<Comment>();
+    for(Long c: commentIDs) {
+      commentObjects.add(getCommentbyID(c));
+    }
+    return commentObjects;
+  }
 }
