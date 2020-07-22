@@ -23,16 +23,17 @@ import javax.servlet.http.HttpServletResponse;
 @MultipartConfig
 public class CommentServlet extends HttpServlet {
   @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String hash = 
+  }
+
+  @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html");
     PrintWriter out = response.getWriter();
 
-    System.out.println(request.getParameter("commentDate"));
-    System.out.println(request.getParameter("commentData"));
-
     long userID = (long) request.getSession(false).getAttribute("userID");
     String commentData = request.getParameter("commentData");
-
     String date = request.getParameter("commentDate");
 
     long commentID = Database.createComment(userID, commentData, date);
