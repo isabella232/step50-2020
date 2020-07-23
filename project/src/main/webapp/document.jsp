@@ -297,6 +297,7 @@
           if(xhttp.readyState == 4 && xhttp.status == 200) {
             //get JSON and loop through to create comment componenets
             var commentList = this.responseText;
+            document.getElementById('comment-container').innerHTML = '';
             for(var i = 0; i < commentList.length; i++) {
               var comment = commentList[i];
               document.getElementById('comment-container').innerHTML += '<comment-component commentID="' +  comment.commentID + '" name="'+ comment.userID +'" date="' + comment.date + '" text="'+ comment.data +'" exists="true"></comment-component>';
