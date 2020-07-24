@@ -315,9 +315,28 @@
       // On comment click
       $(document).on('click','.comment',function(event) {
         // Do real stuff
-        var element = event.target.className;
-        console.log(element);
+        var className = event.target.className;
+        var classList = className.split(" ");
+        var commentID = classList[classList.length - 1].slice(0, -1);
+        toggleCommentHighlight(commentID);
       });
+
+      // On click not on comment
+       $(document).on('click', "html", function(event) {
+          console.log(event.target);
+          if($(event.target).closest('.comment').length == 0 && $(event.target).closest('comment-component').length == 0) {
+            $('.highlight-comment').removeClass("highlight-comment");
+          }
+        });
+
+      // Removes an element from the document
+      function toggleCommentHighlight(commentID) {
+        console.log(commentID);
+        $('.highlight-comment').removeClass("highlight-comment");
+        var commentDiv = $("[commentid='" + commentID + "']").find(".comment-div");
+        commentDiv.addClass("highlight-comment");
+        console.log(commentDiv);
+      }
 
       function deleteComment(id) {
         var markerList = codeMirror.getAllMarks();
@@ -331,7 +350,6 @@
           }
         });
 
-        //removeElement(id);
         var hash = "<%= (String)request.getAttribute("documentHash") %>";
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "/DeleteComment?commentID=" + id + "&documentHash=" + hash, true);
@@ -449,12 +467,6 @@
           document.querySelector('directory-component').docHash = '<%= document.getHash() %>';
         });
       } 
-        
-      // Removes an element from the document
-      function removeElement(commentID) {
-        var element = $("[commentid='" + commentID + "']").remove();
-      }
-
     </script>
   </body>
 </html>
