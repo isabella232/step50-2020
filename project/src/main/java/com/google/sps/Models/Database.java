@@ -419,4 +419,11 @@ public class Database {
     }
     return commentObjects;
   }
+
+  // Deletes a document
+  public static void deleteDocument(String hash) {
+    Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
+    Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+    getDatastore().delete(docEntity.getKey());
+  }
 }

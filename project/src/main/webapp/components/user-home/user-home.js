@@ -1,6 +1,4 @@
 import {html, LitElement} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
-import {MyDocsComponent} from './my-docs-component.js';
-import {FolderComponent} from './folder-component.js';
 import {NavPanel} from './nav-panel.js';
 
 export class UserHome extends LitElement {
