@@ -34,7 +34,6 @@ public class CommentServlet extends HttpServlet {
     
     response.setContentType("application/json;");
     response.getWriter().println(convertToJson(commentsWithName));
-    System.out.println(convertToJson(commentsWithName));
   }
 
   @Override
