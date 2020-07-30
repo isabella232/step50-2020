@@ -73,7 +73,6 @@
         </section>
       </div>
     </div>
-    <button onclick="deleteDoc(); return false"></button>
     <div class="bottom-container">
       <directory-component></directory-component>
       <div id="firepad-container"></div>
