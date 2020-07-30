@@ -171,7 +171,7 @@
         var a = document.createElement('a');
         var blob = new Blob([text], {'type':contentType});
         a.href = window.URL.createObjectURL(blob);
-        a.download = '<%= document.getName() %>' + "." + extDict["<%= document.getLanguage() %>"];
+        a.download = '<%= document.getName().replace("\'", "\\\'") %>' + "." + extDict["<%= document.getLanguage() %>"];
         a.click();
       }
 
