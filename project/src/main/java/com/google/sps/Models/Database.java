@@ -424,6 +424,23 @@ public class Database {
   public static void deleteDocument(String hash) {
     Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
     Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+
+    ArrayList<Long> userIDs = getDocumentUsers(hash);
+    for (long userID : userIDs) {
+      Query queryUser = new Query("User").addFilter(
+        "__key__", Query.FilterOperator.EQUAL, KeyFactory.createKey("User", userID));
+      Entity userEntity = getDatastore().prepare(queryUser).asSingleEntity();
+
+      ArrayList<String> docHashes = getListProperty(userEntity, "docHashes");
+      docHashes.remove(new String(hash));
+
+      userEntity.setProperty("docHashes", docHashes);
+      getDatastore().put(userEntity);
+
+      long folderID = (Long) docEntity.getProperty("folderID");
+      removeDocumentFromFolder(hash, folderID);
+    }
+
     getDatastore().delete(docEntity.getKey());
   }
 }

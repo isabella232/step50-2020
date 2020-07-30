@@ -20,6 +20,6 @@ public class DeleteDocServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String hash = request.getParameter("documentHash");
     Database.deleteDocument(hash);
-    response.sendRedirect("/user-home.jsp");
+    response.sendRedirect("/User");
   }
 }
