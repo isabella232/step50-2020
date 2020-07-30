@@ -455,4 +455,12 @@ public class Database {
     docEntity.setProperty("commentIDs", comments);
     getDatastore().put(docEntity);
   }
+
+  // Rename file
+  public static void renameDocument(String hash, String newName) {
+    Query query = new Query("Document").addFilter("hash", Query.FilterOperator.EQUAL, hash);
+    Entity docEntity = getDatastore().prepare(query).asSingleEntity();
+    docEntity.setProperty("name", newName);
+    getDatastore().put(docEntity);
+  }
 }
