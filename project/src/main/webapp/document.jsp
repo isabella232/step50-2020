@@ -21,15 +21,14 @@
     <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
     <link rel="stylesheet" href="main.css" />
-    <script type="module" src="./components/toolbar-component.js"></script>
-    <script type="module" src="./components/share-component.js"></script>
     <script src="closebrackets.js"></script>
     <script src="matchbrackets.js"></script>
     <script type="module" src="./components/comment-component.js"></script>
     <script type="module" src="./components/document/versioning-component.js"></script>
-    <script type="module" src="./components/comment-component.js"></script>
-    <script src="script.js"></script>
     <script type="module" src="./components/document/directory-component.js"></script>
+    <script type="module" src="./components/document/themes-component.js"></script>
+    <script type="module" src="./components/document/share-component.js"></script>
+    <script src="script.js"></script>
   </head>
 
   <body onload="init(); getHash(); restrict(); initVersioning(); initDirectory(); setTimeout(function(){ loadComments() }, 2000)">
@@ -44,15 +43,16 @@
           response.sendRedirect("/");  
         } %>
       <div class="btn-group">
-        <button class="white-btn" onclick="showElement('share-modal')"> Share </button>
-        <a href="/user-home.jsp"><button class="primary-blue-btn" id="demo-button"> Return home </button></a>
-        <button class="white-btn" onclick="download()"> <i class="fa fa-download" aria-hidden="true"></i> </button>
+        <button class="primary-blue-btn" onclick="showElement('share-modal')"> Share </button>
+        <button class="white-btn" onclick="comment()"> Comment </button>
       </div>
     </div>
     <div class="toolbar">
+      <a href="/user-home.jsp"><button id="demo-button"> Home </button></a>
       <button onclick="toggleElement('directory-component')">Directory</button>
-      <toolbar-component onclick="changeTheme()"></toolbar-component>
-      <button class="version-btn" onclick="toggleElement('versioning-component')">Versioning</button>
+      <themes-component onclick="changeTheme()"></themes-component>
+      <button class="version-btn" onclick="toggleElementReload('versioning-component')">Versioning</button>
+      <button class="plain-btn" onclick="download()"> <i class="fa fa-download" aria-hidden="true"></i> </button>
     </div>
     <div class="modal full-width full-height" id="share-modal">
       <div class="modal-background"></div>
@@ -75,6 +75,7 @@
     </div>
     <div class="bottom-container">
       <directory-component></directory-component>
+      <div id="comment-container" class="comment-container"></div>
       <div id="firepad-container"></div>
       <versioning-component></versioning-component>
     </div>
@@ -100,21 +101,17 @@
       var firepad;
 
       function init() {
-        //// Initialize Firebase.
-        if (firebase.apps.length === 0) {
-          var config = {
-            apiKey: 'AIzaSyDUYns7b2bTK3Go4dvT0slDcUchEtYlSWc',
-            authDomain: "step-collaborative-code-editor.firebaseapp.com",
-            databaseURL: "https://step-collaborative-code-editor.firebaseio.com"
-          };
-          firebase.initializeApp(config);
-        }
-        //// Get Firebase Database reference.
-        var firepadRef = getRef();
-        codeMirror.setValue('');
-        firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
-
-        registerComment();
+        fetch('./api-key.json')
+          .then(response => response.json())
+          .then(config => { 
+            if (firebase.apps.length === 0) {
+              firebase.initializeApp(config);
+            }
+            var firepadRef = getRef();
+            firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
+            initVersioning();
+            registerComment();
+          });
       }
 
       function restrict() {
@@ -174,7 +171,7 @@
         var a = document.createElement('a');
         var blob = new Blob([text], {'type':contentType});
         a.href = window.URL.createObjectURL(blob);
-        a.download = '<%= document.getName() %>' + "." + extDict["<%= document.getLanguage() %>"];
+        a.download = '<%= document.getName().replace("\'", "\\\'") %>' + "." + extDict["<%= document.getLanguage() %>"];
         a.click();
       }
 
@@ -247,10 +244,12 @@
 
       // Generate front end for commenting
       function loadComments() {
+        document.getElementById('comment-container').innerHTML = '';
         var widgetElements = document.getElementsByClassName("CodeMirror-widget");
         if(widgetElements.length == 0) { return; }
         var markerList = [];
         var widgetsFound = 0;
+        var comments = "";
 
         // Identify start and end points of comments and associate appropriate data
         for(var lineIndex = 0; lineIndex < codeMirror.lineCount(); lineIndex++) {
@@ -291,25 +290,25 @@
           codeMirror.markText({line: startMarker.line, ch: startMarker.ch-1}, {line: endMarker.line, ch: endMarker.ch+2}, {className: "comment " + startMarker.id});
 
           // Make the start and end markers read only so that the user doesn't accidentally delete them
-          codeMirror.markText({line: endMarker.line, ch: endMarker.ch}, {line: endMarker.line, ch: endMarker.ch+2}, {readOnly: true});
-          codeMirror.markText({line: startMarker.line, ch: startMarker.ch-1}, {line: startMarker.line, ch: startMarker.ch+1}, {readOnly: true});
+          codeMirror.markText({line: endMarker.line, ch: endMarker.ch}, {line: endMarker.line, ch: endMarker.ch+2}, {className: "comment " + startMarker.id, readOnly: true});
+          codeMirror.markText({line: startMarker.line, ch: startMarker.ch-1}, {line: startMarker.line, ch: startMarker.ch+1}, {className: "comment " + startMarker.id, readOnly: true});
         }
 
         // Load comments themselves
-        var hash = "<%= (String)request.getAttribute("documentHash") %>"
+        var hash = "<%= (String)request.getAttribute("documentHash") %>";
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", "/Comment?documentHash=" + hash, true);
         xhttp.onreadystatechange = function() {
           if(xhttp.readyState == 4 && xhttp.status == 200) {
             //get JSON and loop through to create comment componenets
-            var commentList = this.responseText;
+            var commentList = JSON.parse(this.responseText);
             document.getElementById('comment-container').innerHTML = '';
             for(var i = 0; i < commentList.length; i++) {
               var comment = commentList[i];
-              document.getElementById('comment-container').innerHTML += '<comment-component commentID="' +  comment.commentID + '" name="'+ comment.userID +'" date="' + comment.date + '" text="'+ comment.data +'" exists="true"></comment-component>';
+              document.getElementById('comment-container').innerHTML += '<comment-component commentID="' + comment.commentID + '" name="'+ comment.userName +'" date="' + comment.date + '" text="'+ comment.data +'" exists="true"></comment-component>';
               document.querySelector('comment-component').firepad = firepad;
               document.querySelector('comment-component').codeMirror = codeMirror;
-            }
+            }     
           }
         }
         xhttp.send();
@@ -323,10 +322,49 @@
       }
 
       // On comment click
-      $(document).on('click','.comment',function() {
-        // Do real stuff
-        console.log("comment clicked");
+      $(document).on('click','.comment',function(event) {
+        var className = event.target.className;
+        var classList = className.split(" ");
+        var commentID = classList[classList.length - 1].slice(0, -1);
+        toggleCommentHighlight(commentID);
       });
+
+      // On click not on comment
+       $(document).on('click', "html", function(event) {
+          if($(event.target).closest('.comment').length == 0 && $(event.target).closest('comment-component').length == 0) {
+            $('.highlight-comment').removeClass("highlight-comment");
+          }
+        });
+
+      // Removes an element from the document
+      function toggleCommentHighlight(commentID) {
+        $('.highlight-comment').removeClass("highlight-comment");
+        var commentDiv = $("[commentid='" + commentID + "']").find(".comment-div");
+        commentDiv.addClass("highlight-comment");
+      }
+
+      function deleteComment(id) {
+        var markerList = codeMirror.getAllMarks();
+        markerList.forEach(marker => {
+          if(marker.className == ("comment " + id + "\n")) {
+            if (marker.readOnly == true) {
+              marker.readOnly = false;
+              codeMirror.replaceRange(" ", marker.find().from, marker.find().to);
+            }
+            marker.clear();
+          }
+        });
+
+        var hash = "<%= (String)request.getAttribute("documentHash") %>";
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/DeleteComment?commentID=" + id + "&documentHash=" + hash, true);
+        xhttp.onreadystatechange = function() {
+          if(xhttp.readyState == 4 && xhttp.status == 200) {
+            loadComments();
+          }
+        }
+        xhttp.send(); 
+      }
 
       // Register comment entity
       function registerComment() {
@@ -371,7 +409,7 @@
         versioningComponent.revisionsMap = revisionsMap;
         versioningComponent.commits = commits;
         versioningComponent.addEventListener('close', function() { hideElement('versioning-component'); });
-        versioningComponent.addEventListener('temp', function() { hideElement('versioning-component'); init(); });
+        versioningComponent.addEventListener('temp', function() { hideElement('versioning-component'); window.location.reload(true);});
       }
 
       async function getRevisions() {
@@ -422,19 +460,19 @@
 
       // Render documents in the same
       function initDirectory() {
-        fetch('/Folder?folderID=' + '<%= document.getFolderID() %>').then((response) => response.json()).then((documentsData) => {
-          let documents = [];
+        fetch('/Folder?folderID=' + '<%= document.getFolderID() %>').then((response) => response.json()).then((foldersData) => {
+          let folders = {};
           try {
-            documents = JSON.parse(documentsData.documents);
+            folders = JSON.parse(foldersData.folders);
           } catch(err) {
-            documents = JSON.parse(JSON.stringify(documentsData.documents));
+            folders = JSON.parse(JSON.stringify(foldersData.folders));
           }
-          document.querySelector('directory-component').documents = documents;
-          document.querySelector('directory-component').folderName= documentsData.folderName;
+          folders = new Map(Object.entries(folders));
+          document.querySelector('directory-component').folders = folders;
+          document.querySelector('directory-component').folderID = foldersData.folderID;
           document.querySelector('directory-component').docHash = '<%= document.getHash() %>';
         });
       } 
-
     </script>
   </body>
 </html>

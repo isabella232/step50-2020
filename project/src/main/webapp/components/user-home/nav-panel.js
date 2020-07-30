@@ -19,7 +19,6 @@ export class NavPanel extends LitElement {
 
   constructor() {
     super();
-    this.languages = ['C++', 'Go', 'Python', 'Java', 'Javascript'];
     this.docHash = '';
     this.placeholder = 'Write a document title...';
     this.formDisabled = '';
@@ -33,15 +32,14 @@ export class NavPanel extends LitElement {
   }
 
   createDocument() {
-    let config = {
-      apiKey: 'AIzaSyDUYns7b2bTK3Go4dvT0slDcUchEtYlSWc',
-      authDomain: 'step-collaborative-code-editor.firebaseapp.com',
-      databaseURL: 'https://step-collaborative-code-editor.firebaseio.com'
-    };
-    if (firebase.apps.length === 0) {
-      firebase.initializeApp(config);
-    }
-    this.docHash= this.createDocHash();
+    fetch('../../../api-key.json')
+      .then(response => response.json())
+      .then(config => { 
+        if (firebase.apps.length === 0) {
+          firebase.initializeApp(config);
+        }
+        this.docHash = this.createDocHash();
+      });
   }
 
   createDocHash() {
@@ -81,11 +79,11 @@ export class NavPanel extends LitElement {
     const disableSubmit = this.validTitle && this.validDropdown ? false: true;
     return html`
       <div>
-        <form class="new-doc-group" id="new-doc-form" action="/UserHome" method="POST" onsubmit=${
+        <form class="new-doc-group" id="new-doc-form" action="/UserHome" method="POST" target="_blank" onsubmit=${
         this.createDocument()}>
           <input type="hidden" name="folderID" value=${this.valueID}>
           <input 
-            @change=${(e) => this.validateTitle(e)} 
+            @input=${(e) => this.validateTitle(e)} 
             name="title" id="new-doc-title" 
             class="white-input full-width" 
             placeholder=${this.placeholder}
@@ -93,7 +91,7 @@ export class NavPanel extends LitElement {
           />
           <dropdown-element 
             @change=${(e) => this.validateDropdown(e)}
-            .options="${this.languages}" 
+            .options=${this.languages} 
             name="language"
             label="Languages"
             styling="full-width"
@@ -114,7 +112,7 @@ export class NavPanel extends LitElement {
           <div class="folder-btn-group">
             <panel-element 
               @change=${(e) => this.setPanelValue(e)}
-              .options="${this.folders}" 
+              .options=${this.folders} 
               label="Folders"
               styling="full-width">
             </panel-element>

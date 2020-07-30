@@ -22,26 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/UserHome")
 public class UserHomeServlet extends HttpServlet {
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    long userID = (long) request.getSession(false).getAttribute("userID");
-    User user = Database.getUserByID(userID);
-  
-    HashMap<String, Object> documentsData = new HashMap<String, Object>();
-    documentsData.put("nickname", user.getNickname());
-    documentsData.put("email", user.getEmail());
-    documentsData.put("documents", Database.getUsersDocuments(userID));
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJson(documentsData));
-  }
-
-  // Accepts any Java Object, where each {key: value}
-  // will be the object's attribute and its assigned value.
-  private String convertToJson(Object obj) {
-    Gson gson = new Gson();
-    String json = gson.toJson(obj);
-    return json;
-  }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -52,7 +32,7 @@ public class UserHomeServlet extends HttpServlet {
     Database.createDocument(name, language, docHash, userID);
     String folderID = request.getParameter("folderID");
     if (isValidFolderID(folderID)) {
-      Database.addDocumentToFolder(docHash, Long.parseLong(folderID));
+      Database.moveDocumentToFolder(docHash, Long.parseLong(folderID));
     }
     response.sendRedirect("/Document?documentHash=" + docHash);
   }
@@ -60,7 +40,6 @@ public class UserHomeServlet extends HttpServlet {
   private boolean isValidFolderID(String folderID) {
     return folderID != null 
       && !folderID.equals("undefined") 
-      && folderID.length() > 0
-      && Long.parseLong(folderID) != Folder.DEFAULT_FOLDER_ID;
+      && folderID.length() > 0;
   }
 }

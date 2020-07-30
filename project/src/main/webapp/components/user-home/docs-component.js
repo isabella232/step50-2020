@@ -4,17 +4,20 @@ export class DocsComponent extends LitElement {
   static get properties() {
     return {
       documents: {type: Object},
+      subfolders: {type: Object},
+      languages: {type: Object},
       nickname: {type: String},
       email: {type: String},
       title: {type: String},
       folderID: {type: Number},
-      finishedGetDocuments: {type: Boolean},
+      defaultFolderID: {type: Number},
+      value: {type: Number},
+      valueID: {type: Number}
     };
   }
 
   constructor() {
     super();
-    this.finishedGetDocuments = false;
   }
 
   // Remove shadow DOM so styles are inherited
@@ -38,8 +41,17 @@ export class DocsComponent extends LitElement {
     this.dispatchEvent(moveFolderEvent);
   }
 
+  toggleFolder(folderName, folderID) {
+    this.value = folderName;
+    this.valueID = folderID;
+    this.dispatchEvent(new CustomEvent('toggle-folder'));
+  }
+
   render() {
-    const empty = this.documents.length == 0 && this.finishedGetDocuments;
+    if (this.folderID === this.defaultFolderID) {
+      this.subfolders = [];
+    }
+    const empty = this.documents.length === 0 && this.subfolders.length === 0;
     return html`        
     <div>
       <div class="user-info">
@@ -57,9 +69,25 @@ export class DocsComponent extends LitElement {
           `
           :
           html`
+            ${this.subfolders.length > 0 ?
+              html`
+                <ul class="folders-list">
+                ${this.subfolders.map((folder) => 
+                  html`
+                    <li @click=${() => this.toggleFolder(folder.name, folder.folderID)}>
+                      <img src="../assets/plain-folder.png" />
+                      <a>
+                        ${folder.name}
+                      </a>
+                    </li>
+                ` 
+                )}
+              </ul>
+              ` : 
+              null
+            }
             <ul class="docs-list">
               ${this.documents.map((doc) => 
-                doc.folderID === this.folderID ?
                 html`
                   <li>
                     <div>
@@ -67,7 +95,7 @@ export class DocsComponent extends LitElement {
                         ${doc.name}
                       </a>
                       <span class="tag tag-bordered">
-                        ${doc.language}
+                        ${this.languages[doc.language]}
                       </span>
                     </div>
                     <div>
@@ -76,8 +104,7 @@ export class DocsComponent extends LitElement {
                       </button>
                     </div>
                   </li>
-              ` :
-              html``
+              ` 
               )}
             <ul>
           `
