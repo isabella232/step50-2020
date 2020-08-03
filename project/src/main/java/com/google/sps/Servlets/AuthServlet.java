@@ -24,7 +24,7 @@ public class AuthServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/User";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
       out.println("<a href=" + logoutUrl
-          + "><button><i class=\"fab fa-google\"></i> Sign in with Google</button></a>");
+          + "><button><i class=\"fab fa-google\"></i> Sign out</button></a>");
     } else {
       String urlToRedirectToAfterUserLogsIn = "/User";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);

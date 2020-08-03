@@ -230,6 +230,18 @@
         return false;
       }
 
+      function deleteDoc() {
+        var hash = "<%= (String)request.getAttribute("documentHash") %>"
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/DeleteDoc?documentHash=" + hash, true);
+        xhttp.onreadystatechange = function() {
+          if(xhttp.readyState == 4 && xhttp.status == 200) {
+            console.log("deleted");
+          }
+        }
+        xhttp.send(); 
+      }
+
       // Generate front end for commenting
       function loadComments() {
         document.getElementById('comment-container').innerHTML = '';
