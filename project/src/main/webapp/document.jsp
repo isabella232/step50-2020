@@ -28,6 +28,7 @@
     <script type="module" src="./components/document/directory-component.js"></script>
     <script type="module" src="./components/document/themes-component.js"></script>
     <script type="module" src="./components/document/share-component.js"></script>
+    <script type="module" src="./components/document/rename-component.js"></script>
     <script src="script.js"></script>
   </head>
 
@@ -38,10 +39,12 @@
         if (session.getAttribute("userID") != null) {
             user = Database.getUserByID((long) session.getAttribute("userID"));
             document = Database.getDocumentByHash((String)request.getAttribute("documentHash")); %>
-            <%= document.getName() %>
+            <span id="doc-name"><%= document.getName() %></span>
+            
         <% } else {
           response.sendRedirect("/");  
         } %>
+      <button class="plain-btn" onclick="showElement('rename-modal')"> <i class="fas fa-pencil-alt"></i> </button>
       <div class="btn-group">
         <button class="primary-blue-btn" onclick="showElement('share-modal')"> Share </button>
         <button class="white-btn" onclick="comment()"> Comment </button>
@@ -73,6 +76,7 @@
         </section>
       </div>
     </div>
+    <rename-component hash="<%= (String)request.getAttribute("documentHash") %>"></rename-component>
     <div class="bottom-container">
       <directory-component></directory-component>
       <div id="comment-container" class="comment-container"></div>
@@ -157,6 +161,20 @@
         xhttp.onreadystatechange = function() {
           if(xhttp.readyState == 4 && xhttp.status == 200) {
             document.getElementById("share-response").innerHTML = this.responseText;
+          }
+        }
+        xhttp.send(formData);
+        return false;
+      }
+      
+      // Renames file with name from rename-form
+      function rename() {
+        var formData = new FormData(document.getElementById("rename-form"));
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/Rename", true);
+        xhttp.onreadystatechange = function() {
+          if(xhttp.readyState == 4 && xhttp.status == 200) {
+            document.getElementById("doc-name").innerHTML = this.responseText;
           }
         }
         xhttp.send(formData);
