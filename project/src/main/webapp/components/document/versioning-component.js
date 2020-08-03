@@ -61,25 +61,27 @@ export class VersioningComponent extends LitElement {
       const revision = Firepad.TextOperation.fromJSON(revisionData.o);
       document = document.compose(revision);
     }
-    return document.toJSON();
+    let documentText = '';
+    document.toJSON().map((element) => {
+      if ((typeof element === 'string' || element instanceof String) && element != '') {
+        documentText = documentText.concat(element);
+      }
+    })
+    return documentText;
   }
 
   async temporaryRevert(hash) {
-    let firebaseAdapter = this.getFirebaseAdapter();
+    const firebaseAdapter = this.getFirebaseAdapter();
     firebaseAdapter.ready_ = false;
     await this.revert(hash, false);
     firebaseAdapter.ready_ = true;
     codeMirror.options.readOnly = 'nocursor';
   }
-
+ 
   async revert(hash, close) {
     this.lockLink(hash);
-    const documentSnapshot = await this.createDocumentSnapshot(hash);
-    if (documentSnapshot.length > 0) {
-      firepad.setText(documentSnapshot[documentSnapshot.length - 1]);
-    } else {
-      firepad.setText(documentSnapshot);
-    }
+    const documentText = await this.createDocumentSnapshot(hash);
+    this.firepad.setText(documentText);
     if (close) {
       this.close(true);
     }
@@ -190,7 +192,7 @@ export class VersioningComponent extends LitElement {
             class="has-text-weight-bold white-input full-width" 
             placeholder="Commit name"
             id="commit-name" 
-            @change=${(e) => this.validateCommitName(e)}
+            @input=${(e) => this.validateCommitName(e)}
           />
           <input 
             class="white-input full-width" 
